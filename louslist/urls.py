@@ -16,7 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# SHERRIFF: added the '' path to handle the root url
 urlpatterns = [
+    path('', include('myapp.urls')),
     path('louslist/', include('louslistapp.urls')),
     path('admin/', admin.site.urls),
 ]
