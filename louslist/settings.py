@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-%3d(3p5=&seuq_eb+zoy1(=45f9l5%^w8ci$-sujt==s!l2l8y
 DEBUG = True
 
 # SHERRIFF: Added both the local host and herokuapp.com here to handled the DisallowedHost error.
-ALLOWED_HOSTS = ['localhost','127.0.0.1','staff-build-example.herokuapp.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','project-a-24-louslist.herokuapp.com']
 
 
 # Application definition
@@ -137,4 +137,4 @@ try:
         import django_heroku
         django_heroku.settings(locals())
 except ImportError:
-    found = False 
+    found = False
