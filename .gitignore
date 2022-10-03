@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 # copied from Staff-Build-Example for setting up heroku
 
->>>>>>> e44f46ed8d97c9bb2f08501ca8feeeabceb2688e
 .vscode/settings.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
