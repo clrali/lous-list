@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1',
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +48,16 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 ]
 
+# needed for Google authentication
+SITE_ID = 1
+LOGIN_REDIRECT_URL = "/"
+
+# Additional configuration settings
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
 SOCIALACCOUNT_PROVIDERS = {
    'google': {
       'SCOPE': [
@@ -60,10 +69,6 @@ SOCIALACCOUNT_PROVIDERS = {
       }
    }
 }
-
-# needed for Google authentication
-SITE_ID = 1
-LOGIN_REDIRECT_URL = "/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,7 +85,7 @@ ROOT_URLCONF = 'louslist.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,7 +160,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # SHERRIFF: Added the static_root variable here to fix an erorr with static files not being found
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

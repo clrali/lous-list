@@ -18,10 +18,7 @@ from django.urls import path, include
 
 # SHERRIFF: added the '' path to handle the root url
 urlpatterns = [
-    # needed to change "myapp.urls" to this
-    path('', include('louslistapp.urls')),
-    path('louslist/', include('louslistapp.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-
+    path('', include('louslistapp.urls')),
 ]
