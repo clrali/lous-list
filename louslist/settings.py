@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
 # needed for Google authentication
 SITE_ID = 2
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/home"
 
 # Additional configuration settings
 SOCIALACCOUNT_QUERY_EMAIL = True
