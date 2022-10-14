@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'louslistapp.apps.LouslistappConfig',
+    'bootstrap5',
 
     'allauth',
     'allauth.account',
