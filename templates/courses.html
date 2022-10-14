@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Courses</title>
+</head>
+<body>
+    <h1>List of All UVA Courses</h1>
+    {% for i in response %}
+    <strong>{{i.subject}} ,</strong>
+    <strong>{{i.catalog_number}} ,</strong>
+    <strong>{{i.description}} ,</strong>
+    {% endfor %}
+</body>
+</html>
