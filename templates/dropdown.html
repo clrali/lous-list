@@ -1,0 +1,8 @@
+<h1>Departments: </h1>
+
+<input list="departments" placeholder="Department" type="text" class="form-control">
+    <datalist id="departments">
+        {% for dept in depts %}
+            <option value = "{{ dept.subject }}">{{ dept.subject }}</option>
+        {% endfor %}
+    </datalist>
