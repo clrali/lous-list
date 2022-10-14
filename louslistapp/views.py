@@ -14,3 +14,19 @@ def dept_dropdown(request):
 
 def login(request):
     return render(request, 'login.html')
+
+def get_classes(request):
+    sub = 'CS'
+    url = 'http://luthers-list.herokuapp.com/api/dept/'+sub+'/?format=json'
+    classes_data = requests.get(url).json()
+
+    all_courses = {}
+    for i in classes_data:
+        course = {
+            'subject': sub,
+            'professor': i['instructor']['name']
+        }
+
+    context = {"all_courses": all_courses}
+
+    return render(request, 'courses.html', context)
