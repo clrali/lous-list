@@ -15,14 +15,28 @@
 </head>
 <body>
     <h1>List of All UVA Courses</h1>
-    {% for i in response %}
-    <div class="card text-center" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{i.subject}} {{i.catalog_number}}</h5>
-        <p class="card-text">{{i.description}}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    {% endfor %}
+    <div class="container">
+    <div class="row">
+        {% for i in response %}
+            <div class="col-sm-4 mb-4">
+                <div class="card text-center" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.subject}} {{i.catalog_number}}</h5>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="#" class="btn btn-primary">Show Details</a>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Course Number: {{ i.course_number }}</li>
+                    <li class="list-group-item">Spots Open: {{i.enrollment_available}} / {{i.class_capacity}}</li>
+                    <li class="list-group-item">{{ i.instructor }}</li>
+                  </ul>
+                  <div class="card-body">
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                  </div>
+                </div>
+            </div>
+
+        {% endfor %}
 </body>
 </html>
