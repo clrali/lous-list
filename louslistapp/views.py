@@ -17,14 +17,23 @@ def dept_dropdown(request):
 
     # For courses
     query = request.GET
-    courses = None
+    courses, course_dict = None, None
     if query is not None and 'q' in query:
         dept_name = query.get('q')
         url = 'http://luthers-list.herokuapp.com/api/dept/' + dept_name
         response = requests.get(url)
         courses = response.json()
 
-    return render(request, 'dropdown.html', {'departments': departments, 'courses': courses})
+        # This will make sure that all sections of a course are grouped together
+        course_dict = {}
+        for course in courses:
+            course_name = (course['subject'], course['catalog_number'], course['description'])
+            if course_name in course_dict:
+                course_dict[course_name].append(course)
+            else:
+                course_dict[course_name] = [course]
+
+    return render(request, 'dropdown.html', {'departments': departments, 'courses': course_dict})
 
 
 def login(request):
