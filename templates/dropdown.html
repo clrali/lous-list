@@ -1,8 +1,21 @@
 <h1>Departments: </h1>
 
-<input list="departments" placeholder="Department" type="text" class="form-control">
+<form action="/department/" method="GET">
+
+    <input list="departments" placeholder="Department" type="text" name="q" class="form-control">
     <datalist id="departments">
-        {% for dept in depts %}
-            <option value = "{{ dept.subject }}">{{ dept.subject }}</option>
+        {% for department in departments %}
+            <option value = "{{ department.subject }}">{{ department.subject }}</option>
         {% endfor %}
     </datalist>
+
+    <button type="submit">Search</button>
+
+</form>
+
+{% if courses %}
+    {% for course in courses %}
+        <!-- Add styling (maybe card?) -->
+        <p>{{ course.description }}</p>
+    {% endfor %}
+{% endif %}
