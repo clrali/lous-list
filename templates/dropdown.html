@@ -31,6 +31,11 @@
             <div class="card-body">
                 <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
                 <h5 class="card-text">{{ key.2 }}</h5>
+                {% if key.3 != "-" %}
+                    <h6 class="card-text">Professor {{ key.3 }} ({{ key.4 }})</h6>
+                {% else %}
+                    <h6 class="card-text">Professor TBD</h6>
+                {% endif %}
                 {% for section in value %}
                   <div class="card bg-light text-dark m-1">
                     <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
