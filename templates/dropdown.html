@@ -1,10 +1,43 @@
-<h1>Departments: </h1>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
 
-<input list="departments" placeholder="Department" type="text" class="form-control">
+<div class="m-5" style="text-align:center;">
+    <h1>Search by Department: </h1>
+</div>
+
+<div class=" container mt-3">
+
+<form action="/department/" method="GET">
+
+    <input list="departments" placeholder="Department" type="text" name="q" class="form-control">
     <datalist id="departments">
-        {% for dept in depts %}
-            <option value = "{{ dept.subject }}">{{ dept.subject }}</option>
+        {% for department in departments %}
+            <option value = "{{ department.subject }}">{{ department.subject }}</option>
         {% endfor %}
     </datalist>
 
-<button type="submit" onclick="">Search</button>
+    <div class="d-flex justify-content-center mt-3">
+        {% buttons %}
+        <button type="submit" class="btn btn-dark text">Search</button>
+        {% endbuttons %}
+    </div>
+</form>
+
+{% if courses %}
+    {% for key, value in courses.items %}
+        <div class="card m-2 bg-">
+            <div class="card-body">
+                <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
+                <h5 class="card-text">{{ key.2 }}</h5>
+                {% for section in value %}
+                  <div class="card bg-light text-dark m-1">
+                    <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
