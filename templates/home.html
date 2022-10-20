@@ -1,74 +1,45 @@
-{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %} 
-{% bootstrap_messages %} {% load static %} {% load socialaccount %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+{% load socialaccount %}
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-      crossorigin="anonymous"
-    />
-  </head>
-
-  <body>
-    <nav
-  class="navbar navbar-expand-lg navbar-light"
-  style="background-color: #eda552"
->
+<nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/home">Lou's List</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <a class="navbar-brand" href="http://127.0.0.1:8000/home/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/courses">Course List</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Schedule</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Messages</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/department">Search</a>
+          <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/department/">Search Courses</a>
         </li>
         {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-        </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
         {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% provider_login_url 'google' %}">Login with Google</a>
-        </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
+            </li>
         {% endif %}
       </ul>
     </div>
   </div>
 </nav>
 
-<h1>Home</h1>
-{% if user.is_authenticated %}
-<p>Welcome to the new Lou's list, {{ user.username }}!</p>
-{% endif %}
+<h1>Welcome to Lou's List</h1>
+
+
+
+<body>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <!--<a href="{% url 'account_logout' %}">Logout</a>
+    {% else %}
+        <a href="{% provider_login_url 'google' %}">Login with Google</a>-->
+    {% endif %}
 </body>
 </html>

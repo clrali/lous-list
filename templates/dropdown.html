@@ -1,5 +1,37 @@
-{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %} 
-{% bootstrap_messages %} {% load static %} {% load socialaccount %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load socialaccount %}
+
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="http://127.0.0.1:8000/home/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/department/">Search Courses</a>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
+            </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% if user.is_authenticated %}
+   <p>Welcome, {{ user.username }}!</p>
+{% endif %}
 
 <nav
   class="navbar navbar-expand-lg navbar-light"
@@ -52,6 +84,7 @@
   <h1>Search by Department:</h1>
 </div>
 
+<<<<<<< HEAD
 <div class="container mt-3">
   <form action="/department/" method="GET">
     <input
@@ -61,11 +94,21 @@
       name="q"
       class="form-control"
     />
+=======
+<div class=" container mt-3">
+
+<form action="/department/" method="GET">
+
+    <input list="departments" placeholder="Department (required)" type="text" name="q" class="form-control" style="width: 18rem;">
+>>>>>>> 40469e73a7b813e052b87f68a9c8de6f4ddd624b
     <datalist id="departments">
       {% for department in departments %}
       <option value="{{ department.subject }}">{{ department.subject }}</option>
       {% endfor %}
     </datalist>
+
+    <input placeholder="Course Number" type="text" name="n" class="form-control" style="width: 18rem;">
+    <input placeholder="Professor Name" type="text" name="p" class="form-control" style="width: 18rem;">
 
     <div class="d-flex justify-content-center mt-3">
       {% buttons %}
@@ -106,6 +149,7 @@
             <div class="card-body">
               {{ section.course_section }}-{{ section.component}} ({{ section.course_number }})
             </div>
+<<<<<<< HEAD
           </div>
           {% endfor %}
         </div>
@@ -114,6 +158,14 @@
     {% endfor %} {% endif %}
   </div>
 </div>
+=======
+    {% endfor %}
+{% else %}
+    <p>Did not find results</p>
+{% endif %}
+</div>
+</div>
+>>>>>>> 40469e73a7b813e052b87f68a9c8de6f4ddd624b
 
 <script>
   function myFunction(catalog_num) {
