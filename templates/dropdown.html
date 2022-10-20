@@ -2,6 +2,36 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% bootstrap_messages %}
+{% load socialaccount %}
+
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="http://127.0.0.1:8000/home/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/department/">Search Courses</a>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
+            </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% if user.is_authenticated %}
+   <p>Welcome, {{ user.username }}!</p>
+{% endif %}
 
 <div class="m-5" style="text-align:center;">
     <h1>Search by Department: </h1>
@@ -35,7 +65,7 @@
                     <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
                     <h5 class="card-text">{{ key.2 }}</h5>
                     <!--<p class="card-text">{{value.description}}</p> -->
-                    <a href="#" onclick="myFunction()" class="btn btn-primary">Show Sections</a>
+                    <a href="#" onclick="myFunction({{ key.1 }})" class="btn btn-primary">Show Sections</a>
                   </div>
                   <!--<ul class="list-group list-group-flush">
                     <li class="list-group-item">Course Number: {{ i.course_number }}</li>
@@ -47,7 +77,7 @@
                     <a href="#" class="card-link">Card link</a>
                     <a href="#" class="card-link">Another link</a>
                   </div> -->
-                    <div id="myDIV">
+                    <div id={{key.1}} class="collapse">
                     {% for section in value %}
                       <div class="card bg-light text-dark m-1">
                         <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
@@ -62,10 +92,9 @@
 </div>
 </div>
 
-
 <script>
-function myFunction() {
-  var x = document.getElementById("myDIV");
+function myFunction(catalog_num) {
+  var x = document.getElementById(catalog_num);
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {

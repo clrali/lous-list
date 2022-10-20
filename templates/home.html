@@ -1,10 +1,44 @@
-<h1>Welcome to Lou's List</h1>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
 {% load socialaccount %}
+
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="http://127.0.0.1:8000/home/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/department/">Search Courses</a>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% provider_login_url 'google' %}">Login</a>
+            </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<h1>Welcome to Lou's List</h1>
+
+
+
 <body>
     {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }} !</p>
-        <a href="{% url 'account_logout' %}">Logout</a>
+        <p>Welcome, {{ user.username }}!</p>
+        <!--<a href="{% url 'account_logout' %}">Logout</a>
     {% else %}
-        <a href="{% provider_login_url 'google' %}">Login with Google</a>
+        <a href="{% provider_login_url 'google' %}">Login with Google</a>-->
     {% endif %}
 </body>
