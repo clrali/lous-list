@@ -26,23 +26,50 @@
 </form>
 
 {% if courses %}
+    <div class="row">
     {% for key, value in courses.items %}
-        <div class="card m-2 bg-">
-            <div class="card-body">
-                <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
-                <h5 class="card-text">{{ key.2 }}</h5>
-                {% if key.3 != "-" %}
-                    <h6 class="card-text">{{ key.3 }} ({{ key.4 }})</h6>
-                {% else %}
-                    <h6 class="card-text">Professor TBD</h6>
-                {% endif %}
-                {% for section in value %}
-                  <div class="card bg-light text-dark m-1">
-                    <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
+        <div class="col-sm-4 mb-4">
+
+                <div class="card text-center bg-light text-dark mb-3" style="width: 18rem;">
+                  <div class="card-body">
+                    <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
+                    <h5 class="card-text">{{ key.2 }}</h5>
+                    <!--<p class="card-text">{{value.description}}</p> -->
+                    <a href="#" onclick="myFunction({{ key.1 }})" class="btn btn-primary">Show Sections</a>
+                  </div>
+                  <!--<ul class="list-group list-group-flush">
+                    <li class="list-group-item">Course Number: {{ i.course_number }}</li>
+                    <li class="list-group-item">Spots Open: {{i.enrollment_available}} / {{i.class_capacity}}</li>
+                    <li class="list-group-item">Name: {{ i.instructor.name }}</li>
+                    <li class="list-group-item">Email: {{ i.instructor.email }}</li>
+                  </ul>
+                  <div class="card-body">
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                  </div> -->
+                    <div id={{key.1}} class="collapse">
+                    {% for section in value %}
+                      <div class="card bg-light text-dark m-1">
+                        <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
+                        </div>
+                    {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
+
             </div>
-        </div>
     {% endfor %}
 {% endif %}
 </div>
+</div>
+
+
+<script>
+function myFunction(catalog_num) {
+  var x = document.getElementById(catalog_num);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
