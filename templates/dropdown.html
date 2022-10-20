@@ -35,7 +35,7 @@
                     <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
                     <h5 class="card-text">{{ key.2 }}</h5>
                     <!--<p class="card-text">{{value.description}}</p> -->
-                    <a href="#" onclick="myFunction()" class="btn btn-primary">Show Sections</a>
+                    <a href="#" onclick="myFunction({{ key.1 }})" class="btn btn-primary">Show Sections</a>
                   </div>
                   <!--<ul class="list-group list-group-flush">
                     <li class="list-group-item">Course Number: {{ i.course_number }}</li>
@@ -47,7 +47,7 @@
                     <a href="#" class="card-link">Card link</a>
                     <a href="#" class="card-link">Another link</a>
                   </div> -->
-                    <div id="myDIV">
+                    <div id={{key.1}} class="collapse">
                     {% for section in value %}
                       <div class="card bg-light text-dark m-1">
                         <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
@@ -64,8 +64,8 @@
 
 
 <script>
-function myFunction() {
-  var x = document.getElementById("myDIV");
+function myFunction(catalog_num) {
+  var x = document.getElementById(catalog_num);
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
