@@ -17,8 +17,8 @@ def viewcourses(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/dept/ENGR?format=json').json()
     return render(request, 'courses.html', {'response': response})
 
-def viewcourseSections(request):
-    return render(request, 'courseSections.html', {'response': response})
+#def viewcourseSections(request):
+    #return render(request, 'courseSections.html', {'response': response})
 
 def dept_dropdown(request):
     # For department dropdown
@@ -39,8 +39,8 @@ def dept_dropdown(request):
             course_num = query.get('n')
         if ('p' in query):
             prof_name = query.get('p')
-        print(course_num)
-        print(prof_name)
+        #print(course_num)
+        #print(prof_name)
         url = 'http://luthers-list.herokuapp.com/api/dept/' + dept_name
         response = requests.get(url)
         courses = response.json()
@@ -49,7 +49,7 @@ def dept_dropdown(request):
         # This will make sure that all sections of a course are grouped together
         course_dict = {}
         for course in courses:
-            print(course['instructor']["name"])
+            #print(course['instructor']["name"])
             if(course_num == "" and prof_name==""):
                 course_name = (course['subject'], course['catalog_number'], course['description'])
                 if course_name in course_dict:
@@ -71,7 +71,7 @@ def dept_dropdown(request):
                 else:
                     course_dict[course_name] = [course]
 
-            elif (course_num == course['catalog_number'] and prof_name in course['instructor']["name"]):
+            elif (course_num == course['catalog_number'] and prof_name.lower() in course['instructor']["name"].lower()):
                 course_name = (course['subject'], course['catalog_number'], course['description'])
                 if course_name in course_dict:
                     course_dict[course_name].append(course)
