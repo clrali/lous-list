@@ -41,12 +41,15 @@
 
 <form action="/department/" method="GET">
 
-    <input list="departments" placeholder="Department" type="text" name="q" class="form-control">
+    <input list="departments" placeholder="Department (required)" type="text" name="q" class="form-control" style="width: 18rem;">
     <datalist id="departments">
         {% for department in departments %}
             <option value = "{{ department.subject }}">{{ department.subject }}</option>
         {% endfor %}
     </datalist>
+
+    <input placeholder="Course Number" type="text" name="n" class="form-control" style="width: 18rem;">
+    <input placeholder="Professor Name" type="text" name="p" class="form-control" style="width: 18rem;">
 
     <div class="d-flex justify-content-center mt-3">
         {% buttons %}
@@ -88,6 +91,8 @@
 
             </div>
     {% endfor %}
+{% else %}
+    <p>Did not find results</p>
 {% endif %}
 </div>
 </div>
