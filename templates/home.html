@@ -18,7 +18,6 @@
       integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="{% static 'newlouslist/styling.css' %}" />
   </head>
 
   <body>
@@ -67,8 +66,9 @@
   </div>
 </nav>
 
-    {% if user.is_authenticated %}
-    <p>Welcome to the new Lou's list, {{ user.username }}!</p>
-    {% endif %}
-  </body>
+<h1>Home</h1>
+{% if user.is_authenticated %}
+<p>Welcome to the new Lou's list, {{ user.username }}!</p>
+{% endif %}
+</body>
 </html>

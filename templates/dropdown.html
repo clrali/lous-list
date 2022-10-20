@@ -48,7 +48,7 @@
   </div>
 </nav>
 
-<div class="m-5" style="text-align: center">
+<div class="m-5" style="text-align: center; color: #eda552">
   <h1>Search by Department:</h1>
 </div>
 
@@ -104,8 +104,7 @@
           {% for section in value %}
           <div class="card bg-light text-dark m-1">
             <div class="card-body">
-              {{ section.course_section }}-{{ section.component}} ({{
-              section.course_number }})
+              {{ section.course_section }}-{{ section.component}} ({{ section.course_number }})
             </div>
           </div>
           {% endfor %}
