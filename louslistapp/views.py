@@ -5,7 +5,6 @@ import requests
 def home(request):
     return render(request, 'home.html')
 
-
 def dept_dropdown(request):
     # For department dropdown
     url = 'http://luthers-list.herokuapp.com/api/deptlist'

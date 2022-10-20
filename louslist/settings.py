@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 # needed for Google authentication
 SITE_ID = 2
-LOGIN_REDIRECT_URL = "/home"
+LOGIN_REDIRECT_URL = "/department"
 
 # Additional configuration settings
 SOCIALACCOUNT_QUERY_EMAIL = True

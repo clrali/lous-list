@@ -1,10 +1,74 @@
-<h1>Welcome to Lou's List</h1>
-{% load socialaccount %}
-<body>
+{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %} 
+{% bootstrap_messages %} {% load static %} {% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'newlouslist/styling.css' %}" />
+  </head>
+
+  <body>
+    <nav
+  class="navbar navbar-expand-lg navbar-light"
+  style="background-color: #eda552"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/home">Lou's List</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/courses">Course List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Schedule</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Messages</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/department">Search</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% provider_login_url 'google' %}">Login with Google</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
     {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }} !</p>
-        <a href="{% url 'account_logout' %}">Logout</a>
-    {% else %}
-        <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    <p>Welcome to the new Lou's list, {{ user.username }}!</p>
     {% endif %}
-</body>
+  </body>
+</html>
