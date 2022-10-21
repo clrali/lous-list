@@ -11,11 +11,6 @@ class SearchFunctionalityTest(TestCase):
         self.assertEqual(response.status_code, 200) 
         self.assertContains(response, "Search by Department")
 
-    def test_if_search_department_generates_correct_classes(self):
-        response=self.client.get(reverse('department/?q=ANTH&n=&p='))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "ANTH 1010")
-
 class InstructorModelTest(TestCase):
     def test_if_api_returns_correct_professor(self):
         url = 'http://luthers-list.herokuapp.com/api/dept/CS'
