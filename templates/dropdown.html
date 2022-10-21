@@ -5,92 +5,124 @@
 {% load socialaccount %}
 
 <nav
-class="navbar navbar-expand-lg navbar-light"
-style="background-color: #eda552"
+  class="navbar navbar-expand-lg navbar-light"
+  style="background-color: #eda552"
 >
-<div class="container-fluid">
-  <a class="navbar-brand" href="/home">Lou's List</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/courses">Course List</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Schedule</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Messages</a>
-      </li>
-      <li class="nav-item">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/home">Lou's List</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/courses"
+            >Course List</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Schedule</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Messages</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/department">Search</a>
-      </li>
-      {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% provider_login_url 'google' %}">Login with Google</a>
-      </li>
-      {% endif %}
-    </ul>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% provider_login_url 'google' %}"
+            >Login with Google</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
-</div>
 </nav>
 
 {% if user.is_authenticated %}
-   <p>Welcome, {{ user.username }}!</p>
+<p>Welcome, {{ user.username }}!</p>
 {% endif %}
 
-<div class="m-5" style="text-align:center;">
-    <h1>Search by Department: </h1>
+<div class="m-5" style="text-align: center">
+  <h1>Search by Department:</h1>
 </div>
 
-<div class=" container mt-3">
+<div class="container mt-3">
+  <form action="/department/" method="GET">
+    <div class="d-flex justify-content-center mt-3">
+      <input
+        list="departments"
+        placeholder="Department (required)"
+        type="text"
+        name="q"
+        class="form-control"
+        required
+        style="width: 18rem"
+      />
+    </div>
 
-<form action="/department/" method="GET">
-
-    <input list="departments" placeholder="Department (required)" type="text" name="q" class="form-control" required style="width: 18rem;">
     <datalist id="departments">
-        {% for department in departments %}
-            <option value = "{{ department.subject }}">{{ department.subject }}</option>
-        {% endfor %}
+      {% for department in departments %}
+      <option value="{{ department.subject }}">{{ department.subject }}</option>
+      {% endfor %}
     </datalist>
-
-    <input placeholder="Course Number" type="text" name="n" class="form-control" style="width: 18rem;">
-    <input placeholder="Professor Name" type="text" name="p" class="form-control" style="width: 18rem;">
+    <div class="d-flex justify-content-center mt-3">
+      <input
+        placeholder="Course Number"
+        type="text"
+        name="n"
+        class="form-control"
+        style="width: 18rem"
+      />
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <input
+        placeholder="Professor Name"
+        type="text"
+        name="p"
+        class="form-control"
+        style="width: 18rem"
+      />
+    </div>
 
     <div class="d-flex justify-content-center mt-3">
-        {% buttons %}
-        <button type="submit" class="btn btn-dark text">Search</button>
-        {% endbuttons %}
+      {% buttons %}
+      <button type="submit" class="btn btn-dark text">Search</button>
+      {% endbuttons %}
     </div>
-</form>
+  </form>
 
-{% if courses %}
-    <div class="row">
+  {% if courses %}
+  <div class="row">
     {% for key, value in courses.items %}
-        <div class="col-sm-4 mb-4">
-
-                <div class="card text-center bg-light text-dark mb-3" style="width: 18rem;">
-                  <div class="card-body">
-                    <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
-                    <h5 class="card-text">{{ key.2 }}</h5>
-                    <!--<p class="card-text">{{value.description}}</p> -->
-                    <a href="#" onclick="myFunction('{{key.1}}')" class="btn btn-primary">Show Sections</a>
-                  </div>
-                  <!--<ul class="list-group list-group-flush">
+    <div class="col-sm-4 mb-4">
+      <div
+        class="card text-center bg-light text-dark mb-3"
+        style="width: 18rem"
+      >
+        <div class="card-body">
+          <h4 class="card-title">{{ key.0 }} {{ key.1 }}</h4>
+          <h5 class="card-text">{{ key.2 }}</h5>
+          <!--<p class="card-text">{{value.description}}</p> -->
+          <a href="#" onclick="myFunction('{{key.1}}')" class="btn btn-primary"
+            >Show Sections</a
+          >
+        </div>
+        <!--<ul class="list-group list-group-flush">
                     <li class="list-group-item">Course Number: {{ i.course_number }}</li>
                     <li class="list-group-item">Spots Open: {{i.enrollment_available}} / {{i.class_capacity}}</li>
                     <li class="list-group-item">Name: {{ i.instructor.name }}</li>
@@ -100,30 +132,31 @@ style="background-color: #eda552"
                     <a href="#" class="card-link">Card link</a>
                     <a href="#" class="card-link">Another link</a>
                   </div> -->
-                    <div id={{key.1}} class="collapse">
-                    {% for section in value %}
-                      <div class="card bg-light text-dark m-1">
-                        <div class="card-body">{{ section.course_section }}-{{ section.component}} ({{ section.course_number }})</div>
-                        </div>
-                    {% endfor %}
-                    </div>
-                </div>
-
+        <div id="{{key.1}}" class="collapse">
+          {% for section in value %}
+          <div class="card bg-light text-dark m-1">
+            <div class="card-body">
+              {{ section.course_section }}-{{ section.component}} ({{
+              section.course_number }})
             </div>
-    {% endfor %}
-{% else %}
-    <p>Did not find results</p>
-{% endif %}
-</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h2 style="text-align: center">No results</h2>
+    {% endif %}
+  </div>
 </div>
 
 <script>
-function myFunction(catalog_num) {
-  var x = document.getElementById(catalog_num);
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
+  function myFunction(catalog_num) {
+    var x = document.getElementById(catalog_num);
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
   }
-}
 </script>

@@ -6,10 +6,15 @@ import requests
 # Create your tests here.
 
 class SearchFunctionalityTest(TestCase):
-    def test_if_search_department_returns_corrent_results(self):
+    def test_if_search_links_to_correct_page(self):
         response=self.client.get(reverse('department'))
         self.assertEqual(response.status_code, 200) 
         self.assertContains(response, "Search by Department")
+
+    def test_if_search_department_generates_correct_classes(self):
+        response=self.client.get(reverse('department/?q=ANTH&n=&p='))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "ANTH 1010")
 
 class InstructorModelTest(TestCase):
     def test_if_api_returns_correct_professor(self):
