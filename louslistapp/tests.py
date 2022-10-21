@@ -1,13 +1,18 @@
 from django.test import TestCase
-import unittest
+from django.urls import reverse
 from .models import Instructor
 import requests
 
 # Create your tests here.
 
+class SearchFunctionalityTest(TestCase):
+    def test_if_search_department_returns_corrent_results(self):
+        response=self.client.get(reverse('department'))
+        self.assertEqual(response.status_code, 200) 
+        self.assertContains(response, "Search by Department")
 
-class InstructorModelTest(unittest.TestCase):
-    def test_api_returns_correct_professor(self):
+class InstructorModelTest(TestCase):
+    def test_if_api_returns_correct_professor(self):
         url = 'http://luthers-list.herokuapp.com/api/dept/CS'
         response = requests.get(url)
         courses = response.json()[0]
@@ -20,7 +25,7 @@ class InstructorModelTest(unittest.TestCase):
         self.assertEqual(test_instructor.prof_name,
                          expected_instructor.prof_name, "The instructor is not as expected")
 
-    def test_api_returns_incorrect_professor(self):
+    def test_if_api_returns_incorrect_professor(self):
         url = 'http://luthers-list.herokuapp.com/api/dept/CS'
         response = requests.get(url)
         courses = response.json()[1]
@@ -32,7 +37,3 @@ class InstructorModelTest(unittest.TestCase):
 
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
-
-
-if __name__ == '__main__':
-    unittest.main()
