@@ -12,9 +12,9 @@ class InstructorModelTest(unittest.TestCase):
         response = requests.get(url)
         courses = response.json()[0]
 
-        test_instructor = Instructor.objects.create(
+        test_instructor = Instructor(
             prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
-        expected_instructor = Instructor.objects.create(
+        expected_instructor = Instructor(
             prof_name="Derrick Stone", prof_email="djs6d@virginia.edu")
 
         self.assertEqual(test_instructor.prof_name,
