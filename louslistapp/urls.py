@@ -7,5 +7,5 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('department/', views.dept_dropdown, name='department'),
     path('courses', views.viewcourses, name='courses'),
-    path('courseSections', views.viewcourseSections, name='courseSections'),
+    #path('courseSections', views.viewcourseSections, name='courseSections'),
 ]
