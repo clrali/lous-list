@@ -1,10 +1,11 @@
 import datetime
 from email.policy import default
-from msilib.schema import Component
+# from msilib.schema import Component
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
 # Create your models here.
+
 
 class Course(models.Model):
     prof_name = models.CharField(max_length=100)
@@ -24,9 +25,11 @@ class Course(models.Model):
     enrollment_available = models.IntegerField(default=0)
     days = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
+    # is_favorited = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.description
+
 
 class Instructor(models.Model):
     prof_name = models.CharField(max_length=100)
@@ -34,3 +37,18 @@ class Instructor(models.Model):
 
     def __str__(self) -> str:
         return self.prof_name
+
+
+class Schedule(models.Model):
+    # Courses
+    courses = ArrayField(models.Course(), size=8)
+    time_conflict = models.BooleanField()
+    comments = ArrayField(models.CharField(max_length=500), size=20)
+
+
+class User(models.Model):
+    email = models.CharField(max_length=100)
+    schedules = ArrayField(models.Schedule(), size=10)
+    favorites = ArrayField(models.Course(), size=50)
+    friends = ArrayField(models.User(), size=10)
+    # username?
