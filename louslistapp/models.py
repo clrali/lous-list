@@ -38,14 +38,14 @@ class Instructor(models.Model):
 
 # class Schedule(models.Model):
 #     # Courses
-#     courses = ArrayField(models.Course(), size=8)
+#     courses = ArrayField(Course, size=8)
 #     time_conflict = models.BooleanField()
 #     comments = ArrayField(models.CharField(max_length=500), size=20)
 
 
-# class User(models.Model):
+# class Student(models.Model):
 #     email = models.CharField(max_length=100)
-#     schedules = ArrayField(models.Schedule(), size=10)
-#     favorites = ArrayField(models.Course(), size=50)
-#     friends = ArrayField(models.User(), size=10)
-#     # username?
+#     schedules = ArrayField(Schedule, size=10)
+#     favorites = ArrayField(Course, size=50)
+    # friends = ArrayField(Student, size=10)
+    # username?

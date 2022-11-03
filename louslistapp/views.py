@@ -32,7 +32,6 @@ def dept_dropdown(request):
     url = 'http://luthers-list.herokuapp.com/api/deptlist'
     response = requests.get(url)
     departments = response.json()
-    # print(response)
 
     # For courses
     query = request.GET
@@ -84,7 +83,6 @@ def dept_dropdown(request):
 
 def course_detail(request, id):
     course = Course.objects.get(id = id)
-    print(course)
     return render (
         request, 
         'course_detail.html',
