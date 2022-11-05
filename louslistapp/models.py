@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib import admin
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Course(models.Model):
@@ -49,3 +50,28 @@ class Instructor(models.Model):
 #     favorites = ArrayField(Course, size=50)
     # friends = ArrayField(Student, size=10)
     # username?
+
+# class Student(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#     email = models.CharField(max_length=100)
+#     @receiver(models.signals.post_save, sender=get_user_model())
+#     def create_student_user(sender, instance, created, **kwargs):
+#         if created:
+#             Student.objects.create(user=instance)
+
+class Schedule(models.Model):
+    # Courses
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    time_created = models.DateTimeField(auto_now_add=True)
+    credits = models.IntegerField(default=0)
+    name = models.CharField(max_length=100, default="Schedule 1")
+    courses = models.ManyToManyField(Course, related_name="schedules")
+    
+    def __str__(self):
+        return self.description
+    
+
+# class Profile(models.Model):
+#     email = models.CharField(max_length=100)
+#     username = models.CharField(max_length=100, default = "Guest")
+#     schedules = models.ManyToManyField(Schedule, blank=True)
