@@ -7,7 +7,8 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('department/', views.dept_dropdown, name='department'),
     path('courses', views.viewcourses, name='courses'),
-    path('courses/<int:id>/',views.course_detail, name = "course_detail")
+    path('courses/<int:id>/',views.course_detail, name = "course_detail"),
+    # path('schedule', views.schedule_builder, name='schedule_builder')
 
     #path('courseSections', views.viewcourseSections, name='courseSections'),
 ]

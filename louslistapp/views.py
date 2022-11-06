@@ -88,3 +88,5 @@ def course_detail(request, id):
         'course_detail.html',
         {'course': course}
     )
+
+# def schedule_builder(request, id):
