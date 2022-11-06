@@ -1,6 +1,5 @@
-{% load bootstrap5 %} 
-{% bootstrap_css %} {% bootstrap_javascript %} {% bootstrap_messages %} 
-{% load static %} {% load socialaccount %}
+{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %} 
+{% bootstrap_messages %} {% load static %} {% load socialaccount %}
 
 <html>
   <head>
@@ -26,6 +25,9 @@
             <li class="nav-item">
               <a class="nav-link" href="/department">Search</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/schedule">My Schedule</a>
+            </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
@@ -43,7 +45,6 @@
     </nav>
   </head>
   <body>
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
   </body>
 </html>

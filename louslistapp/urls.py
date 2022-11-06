@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import CourseList, CourseCreate
 from . import views
 
 urlpatterns = [
@@ -6,9 +7,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('login/', views.login, name='login'),
     path('department/', views.dept_dropdown, name='department'),
-    path('courses', views.viewcourses, name='courses'),
-    path('courses/<int:id>/',views.course_detail, name = "course_detail"),
-    # path('schedule', views.schedule_builder, name='schedule_builder')
-
-    #path('courseSections', views.viewcourseSections, name='courseSections'),
+    path('courses/<int:id>/', views.course_detail, name="course"),
+    path('schedule/', CourseList.as_view(), name="courses"),
+    path('course-create/', CourseCreate.as_view(), name='course-create'),
 ]

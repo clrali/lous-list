@@ -1,11 +1,14 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
-from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 # Create your models here.
 
+
 class Course(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True
+    )
     prof_name = models.CharField(max_length=100)
     prof_email = models.CharField(max_length=100)
     course_number = models.IntegerField(default=0)
@@ -23,7 +26,7 @@ class Course(models.Model):
     enrollment_available = models.IntegerField(default=0)
     days = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
-    # is_favorited = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.description
@@ -36,21 +39,6 @@ class Instructor(models.Model):
     def __str__(self) -> str:
         return self.prof_name
 
-
-# class Schedule(models.Model):
-#     # Courses
-#     courses = ArrayField(Course, size=8)
-#     time_conflict = models.BooleanField()
-#     comments = ArrayField(models.CharField(max_length=500), size=20)
-
-
-# class Student(models.Model):
-#     email = models.CharField(max_length=100)
-#     schedules = ArrayField(Schedule, size=10)
-#     favorites = ArrayField(Course, size=50)
-    # friends = ArrayField(Student, size=10)
-    # username?
-
 # class Student(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 #     email = models.CharField(max_length=100)
@@ -59,16 +47,28 @@ class Instructor(models.Model):
 #         if created:
 #             Student.objects.create(user=instance)
 
+
 class Schedule(models.Model):
-    # Courses
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    time_created = models.DateTimeField(auto_now_add=True)
-    credits = models.IntegerField(default=0)
     name = models.CharField(max_length=100, default="Schedule 1")
-    courses = models.ManyToManyField(Course, related_name="schedules")
+    courses = models.ManyToManyField(Course, blank=True, related_name="schedules")
+    schedule_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", null=True)
     
     def __str__(self):
-        return self.description
+        return self.name
+    
+    @classmethod
+    def add_course(cls, current_user, new_course):
+        schedule, created = cls.objects.get_or_create(
+            schedule_owner = current_user
+        )
+        schedule.courses.add(new_course)
+    
+    @classmethod
+    def remove_course(cls, current_user, new_course):
+        schedule, created = cls.objects.get_or_create(
+            schedule_owner = current_user
+        )
+        schedule.courses.remove(new_course)
     
 
 # class Profile(models.Model):

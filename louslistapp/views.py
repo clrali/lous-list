@@ -1,30 +1,21 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 import requests
-from .models import Course
+from .models import Course, Schedule
+from .forms import CourseSelected
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.views.generic import TemplateView
+from django.urls import reverse_lazy
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'louslistapp/home.html')
 
 
 def login(request):
-    return render(request, 'login.html')
-
-
-def viewdepts(request):
-    response = requests.get(
-        'http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'dropdown.html', {'response': response})
-
-
-def viewcourses(request):
-    response = requests.get(
-        'http://luthers-list.herokuapp.com/api/dept/ENGR?format=json').json()
-    return render(request, 'courses.html', {'response': response})
-
-# def viewcourseSections(request):
-    # return render(request, 'courseSections.html', {'response': response})
+    return render(request, 'louslistapp/login.html')
 
 
 def dept_dropdown(request):
@@ -53,40 +44,66 @@ def dept_dropdown(request):
         all_courses = {}
         for course in courses:
             obj, course_data = Course.objects.get_or_create(
-                prof_name= course['instructor']['name'],
-                prof_email = course['instructor']['email'],
-                course_number = course['course_number'],
-                semester_code = course['semester_code'],
-                course_section = course['course_section'],
-                subject = course['subject'],
-                catalog_number = course['catalog_number'],
-                description = course['description'], 
-                units = course['units'],
-                component = course['component'],
-                class_capacity = course['class_capacity'],
-                waitlist = course['wait_list'],
-                wait_cap = course['wait_cap'],
-                enrollment_total = course['enrollment_total'],
-                enrollment_available = course['enrollment_available'],
-                days = course['meetings'][0]['days'],
-                location = course['meetings'][0]['facility_description']
+                prof_name=course['instructor']['name'],
+                prof_email=course['instructor']['email'],
+                course_number=course['course_number'],
+                semester_code=course['semester_code'],
+                course_section=course['course_section'],
+                subject=course['subject'],
+                catalog_number=course['catalog_number'],
+                description=course['description'],
+                units=course['units'],
+                component=course['component'],
+                class_capacity=course['class_capacity'],
+                waitlist=course['wait_list'],
+                wait_cap=course['wait_cap'],
+                enrollment_total=course['enrollment_total'],
+                enrollment_available=course['enrollment_available'],
+                days=course['meetings'][0]['days'],
+                location=course['meetings'][0]['facility_description']
             )
             if course_num == "" and professor_name == "":
-                all_courses = Course.objects.filter(subject=dept_name).order_by('id')
+                all_courses = Course.objects.filter(
+                    subject=dept_name).order_by('id')
             elif course_num != "" and professor_name != "":
-                all_courses = Course.objects.filter(subject=dept_name, catalog_number=course_num, prof_name=professor_name).order_by('id')
+                all_courses = Course.objects.filter(
+                    subject=dept_name, catalog_number=course_num, prof_name=professor_name).order_by('id')
             elif course_num != "" and professor_name == "":
-                all_courses = Course.objects.filter(subject=dept_name, catalog_number=course_num).order_by('id')
+                all_courses = Course.objects.filter(
+                    subject=dept_name, catalog_number=course_num).order_by('id')
             else:
-                all_courses = Course.objects.filter(subject=dept_name, prof_name__contains=professor_name).order_by('id')
-    return render(request, 'displayCourses.html', { 'departments': departments, 'all_courses': all_courses})
+                all_courses = Course.objects.filter(
+                    subject=dept_name, prof_name__contains=professor_name).order_by('id')
+    return render(request, 'louslistapp/displayCourses.html', {'departments': departments, 'all_courses': all_courses})
+
+
+class CourseList(TemplateView):
+    model = Course
+    context_object_name = "courses"
+    template_name = "louslistapp/course_list.html"
+    title = "Courses"
+
+    def courses(self):
+        return Course.objects.filter(selected=True)
+
+
+class CourseCreate(CreateView):
+    model = Course
+    fields = ['user', 'prof_name', 'semester_code',
+        'subject', 'catalog_number', ]
+    success_url = reverse_lazy('courses')
+
 
 def course_detail(request, id):
-    course = Course.objects.get(id = id)
-    return render (
-        request, 
-        'course_detail.html',
-        {'course': course}
-    )
+    course = Course.objects.get(id=id)
+    form2 = CourseSelected(request.POST)
 
-# def schedule_builder(request, id):
+    if request.method == 'POST':
+        if form2.is_valid():
+            if course.selected == False:
+                course.selected = True
+            else:
+                course.selected = False
+            course.save()
+    
+    return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
