@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
 import requests
-from .models import Course, Schedule
+from .models import Course
 from .forms import CourseSelected
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
