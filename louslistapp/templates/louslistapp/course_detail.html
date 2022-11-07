@@ -1,5 +1,11 @@
 {% extends 'louslistapp/navbar.html' %}
+{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+{% bootstrap_messages %} {% load socialaccount %}
 {% block content %}
+
+<html>
+<body>
+
     <div class = "container"> 
         <br><br>
         <div class="row"> 
@@ -17,7 +23,11 @@
               <p>Days taught: {{ course.days }}</p>
               <p>Location: {{ course.location }}</p>
               </ul>
+                <a href="#" onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')">
+                 <img alt="CourseForum" src="https://thecourseforum.com/static/base/img/new_logo.png" width=40" height="40">
+              </a>
             </div>
+
         </div>
         <style>
           .hide {
@@ -47,3 +57,13 @@
         </form>
     </div>    
 {% endblock %}
+
+
+<script>
+  function myFunction2(p1, p2) {
+        window.location = "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
+      }
+</script>
+
+</body>
+</html>

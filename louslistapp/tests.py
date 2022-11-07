@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Instructor
+from .models import Instructor, Course
 import requests
 
 # Create your tests here.
@@ -37,7 +37,19 @@ class InstructorModelTest(TestCase):
 
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
+"""
+    def test_course_search_instructor(self):
+        response = self.client.get('/department/?q=APMA&n=3100&p=')
+        courses = response.json()[1]
+        print(courses)
+        test_instructor = Instructor.objects.create(
+            prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
+        expected_instructor = Instructor.objects.create(
+            prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
 
+        self.assertNotEqual(test_instructor.prof_name,
+                            expected_instructor.prof_name, "The instructor is the same")
+"""
 class URLTest(TestCase):
     def test_URL(self):
         response = self.client.get('/')
@@ -48,4 +60,9 @@ class URLTest(TestCase):
     def test_GoogleLoginURL(self):
         response = self.client.get('/accounts/google/login/')
         # verify that the  accounts url will send out a 200 HTTP status code
+        self.assertEqual(response.status_code, 200)
+
+class CourseDisplayTest(TestCase):
+    def test_invalid_course_search(self):
+        response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
