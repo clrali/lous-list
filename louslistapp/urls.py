@@ -14,5 +14,6 @@ urlpatterns = [
     path('course-create/', CourseCreate.as_view(), name='course-create'),
     path('', TemplateView.as_view(template_name="login.html")),
     path('accounts/', include('allauth.urls')),
-    path('logout', LogoutView.as_view()),
+    path('logout/', LogoutView.as_view()),
+    path('profile/<username>', views.profile, name="profile")
 ]

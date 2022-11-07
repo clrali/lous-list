@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 import requests
 from django.utils import timezone
 from datetime import datetime, timedelta 
-from .models import Course
+from .models import Course, UserProfile
 from .forms import CourseSelected
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
-
+from django.contrib.auth.models import User
 
 def home(request):
     return render(request, 'louslistapp/home.html')
@@ -117,3 +118,11 @@ def course_detail(request, id):
     
     return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
 
+
+def profile(request, username):
+	try:
+		user = User.objects.get(username=username)
+	except:
+		raise Http404
+
+	return render(request, 'louslistapp/profile.html', {"profile": user})

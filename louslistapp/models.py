@@ -44,6 +44,14 @@ class Instructor(models.Model):
     def __str__(self) -> str:
         return self.prof_name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    bio = models.TextField(default="this is my bio")
+    
+    def __str__(self) -> str:
+        return self.user.username
+
 # class Student(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 #     email = models.CharField(max_length=100)

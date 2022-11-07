@@ -32,12 +32,15 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
+              <a class="nav-link" href="/profile/{{user.username}}">{{user.username}}'s Profile</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% provider_login_url 'google' %}"
-                >Login with Google</a
+                >Login</a
               >
             </li>
             {% endif %}
