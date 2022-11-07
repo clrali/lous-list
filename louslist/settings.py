@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
                  'project-a-24-louslist.herokuapp.com']
 
-
+#AUTH_USER_MODEL = 'louslistapp.User'
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -141,6 +141,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

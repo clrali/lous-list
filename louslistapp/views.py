@@ -74,14 +74,13 @@ def dept_dropdown(request):
     return render(request, 'louslistapp/displayCourses.html', {'departments': departments, 'all_courses': all_courses})
 
 
-class CourseList(TemplateView):
+def CourseList(request):
     model = Course
     context_object_name = "courses"
     template_name = "louslistapp/course_list.html"
     title = "Courses"
-
-    def courses(self):
-        return Course.objects.filter(selected=True)
+    context = Course.objects.filter(selected = True, user = request.user)
+    return render(request, 'louslistapp/course_list.html', {"all_course" : context})
 
 
 class CourseCreate(CreateView):
@@ -89,6 +88,7 @@ class CourseCreate(CreateView):
     fields = ['user', 'prof_name', 'semester_code',
         'subject', 'catalog_number', ]
     success_url = reverse_lazy('courses')
+    
 
 
 def course_detail(request, id):
@@ -99,8 +99,10 @@ def course_detail(request, id):
         if form2.is_valid():
             if course.selected == False:
                 course.selected = True
+                course.user = request.user
             else:
                 course.selected = False
             course.save()
     
     return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
+
