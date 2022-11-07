@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 import requests
+from django.utils import timezone
+from datetime import datetime, timedelta 
 from .models import Course
 from .forms import CourseSelected
 from django.views.generic.edit import CreateView
@@ -40,6 +42,13 @@ def dept_dropdown(request):
         # This will make sure that all sections of a course are grouped together
         all_courses = {}
         for course in courses:
+            if course['meetings'][0]['start_time'] == "":
+                startTime = "00.00.00"
+                endTime = "00.00.00"
+            else:
+                startTime = (course['meetings'][0]['start_time'])[:8]
+                endTime = (course['meetings'][0]['end_time'])[:8]
+
             obj, course_data = Course.objects.get_or_create(
                 prof_name=course['instructor']['name'],
                 prof_email=course['instructor']['email'],
@@ -57,6 +66,8 @@ def dept_dropdown(request):
                 enrollment_total=course['enrollment_total'],
                 enrollment_available=course['enrollment_available'],
                 days=course['meetings'][0]['days'],
+                start_time=datetime.strptime(startTime, '%H.%M.%S'),
+                end_time=datetime.strptime(endTime, '%H.%M.%S'),
                 location=course['meetings'][0]['facility_description']
             )
             if course_num == "" and professor_name == "":

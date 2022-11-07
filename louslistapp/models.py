@@ -25,6 +25,8 @@ class Course(models.Model):
     enrollment_total = models.IntegerField(default=0)
     enrollment_available = models.IntegerField(default=0)
     days = models.CharField(max_length=100)
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
     location = models.CharField(max_length=100)
     selected = models.BooleanField(default=False)
 
