@@ -2,8 +2,11 @@ from django.db import models
 from django.utils import timezone
 from django.contrib import admin
 from django.contrib.auth.models import User
-# Create your models here.
+from django.contrib.auth.models import AbstractUser
 
+# Create your models here.
+class account(User):
+    cart = models.ManyToManyField("Course")
 
 class Course(models.Model):
     user = models.ForeignKey(
@@ -50,6 +53,7 @@ class Instructor(models.Model):
 #             Student.objects.create(user=instance)
 
 
+
 class Schedule(models.Model):
     name = models.CharField(max_length=100, default="Schedule 1")
     courses = models.ManyToManyField(Course, blank=True, related_name="schedules")
@@ -72,6 +76,8 @@ class Schedule(models.Model):
         )
         schedule.courses.remove(new_course)
     
+#class User(AbstractUser):
+ #   cart = models.ForeignKey(Schedule, on_delete=models.CASCADE)
 
 # class Profile(models.Model):
 #     email = models.CharField(max_length=100)
