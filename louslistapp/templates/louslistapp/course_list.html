@@ -8,7 +8,7 @@
   </tr>
   {% for course in all_course %}
   <tr>
-    <td>{{course.description}} -- {{course.prof_name}}</td>
+    <td>({{course.subject}} {{course.catalog_number}}) {{course.description}} -- {{course.prof_name}}</td>
     <td><a href="{% url 'course' course.id %}">View</a></td>
   </tr>
   {% empty %}
