@@ -1,0 +1,18 @@
+{% extends 'louslistapp/navbar.html' %} 
+
+{% block content %}
+<h1>My Courses</h1>
+<table>
+  <tr>
+    <th>{{ view.title }}</th>
+  </tr>
+  {% for course in all_course %}
+  <tr>
+    <td>{{course.description}} -- {{course.prof_name}}</td>
+    <td><a href="{% url 'course' course.id %}">View</a></td>
+  </tr>
+  {% empty %}
+  <h3>No courses in schedule</h3>
+  {% endfor %}
+</table>
+{% endblock %}

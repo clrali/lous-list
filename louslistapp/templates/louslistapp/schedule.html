@@ -1,0 +1,57 @@
+{% extends 'louslistapp/navbar.html' %}
+
+{% block content %}
+<div class="m-5" style="text-align:center;">
+    <h1>Schedule</h1>
+</div>
+
+<div class=" container mt-3">
+
+{% if duplicate_courses %}
+    {% for course in duplicate_courses %}
+        <div class="alert alert-warning">
+            <strong>Alert!</strong>
+            You have selected multiple sections of {{ course.subject }} {{ course.catalog_number }}.
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+{% if course_time_conflicts %}
+    {% for key, value in course_time_conflicts.items %}
+        {% for course_pair in value %}
+            <div class="alert alert-warning">
+                <strong>Alert!</strong>
+                You have a time conflict between {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }}
+                and {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} on {{ key }}.
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+
+{% if schedule %}
+    {% for key, value in schedule.items %}
+        <div class="card m-2 bg-">
+            <div class="card-body">
+                <h3 class="card-title">{{ key }}</h3>
+                {% for course in value %}
+                  <div class="card bg-light text-dark m-2" >
+                    <div class="card-header h6">
+                        <h5>{{ course.description}}  |  {{ course.subject }} {{ course.catalog_number }}</h5>
+                        <h6 class="card-subtitle text-muted">
+                            {{ course.course_section}}-{{ course.component}} ({{ course.course_number}})
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Start Time: {{ course.start_time }}</p>
+                        <p class="card-text">End Time: {{ course.end_time }}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}
