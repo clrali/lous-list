@@ -5,8 +5,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+
+
 class account(User):
     cart = models.ManyToManyField("Course")
+
 
 class Course(models.Model):
     user = models.ForeignKey(
@@ -28,12 +31,18 @@ class Course(models.Model):
     enrollment_total = models.IntegerField(default=0)
     enrollment_available = models.IntegerField(default=0)
     days = models.CharField(max_length=100)
+<<<<<<< HEAD
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(default=timezone.now)
+=======
+    start_time = models.CharField(max_length=100, default=None)
+    end_time = models.CharField(max_length=100, default=None)
+>>>>>>> 31b538d5d6e3fc4ec96bf90f023b9052647e5e8a
     location = models.CharField(max_length=100)
     selected = models.BooleanField(default=False)
 
     def __str__(self) -> str:
+        # return self.start_time + " " + self.end_time
         return self.description
 
 
@@ -61,7 +70,6 @@ class UserProfile(models.Model):
 #             Student.objects.create(user=instance)
 
 
-
 class Schedule(models.Model):
     name = models.CharField(max_length=100, default="Schedule 1")
     courses = models.ManyToManyField(Course, blank=True, related_name="schedules")
@@ -73,14 +81,14 @@ class Schedule(models.Model):
     @classmethod
     def add_course(cls, current_user, new_course):
         schedule, created = cls.objects.get_or_create(
-            schedule_owner = current_user
+            schedule_owner=current_user
         )
         schedule.courses.add(new_course)
     
     @classmethod
     def remove_course(cls, current_user, new_course):
         schedule, created = cls.objects.get_or_create(
-            schedule_owner = current_user
+            schedule_owner=current_user
         )
         schedule.courses.remove(new_course)
     
