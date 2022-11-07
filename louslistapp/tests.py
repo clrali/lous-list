@@ -1,7 +1,14 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from .models import Instructor, Course
 import requests
+from django.test import TestCase, RequestFactory, Client, TransactionTestCase
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
+
+
+
 
 # Create your tests here.
 
@@ -37,19 +44,8 @@ class InstructorModelTest(TestCase):
 
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
-"""
-    def test_course_search_instructor(self):
-        response = self.client.get('/department/?q=APMA&n=3100&p=')
-        courses = response.json()[1]
-        print(courses)
-        test_instructor = Instructor.objects.create(
-            prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
-        expected_instructor = Instructor.objects.create(
-            prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
 
-        self.assertNotEqual(test_instructor.prof_name,
-                            expected_instructor.prof_name, "The instructor is the same")
-"""
+
 class URLTest(TestCase):
     def test_URL(self):
         response = self.client.get('/')
@@ -66,3 +62,13 @@ class CourseDisplayTest(TestCase):
     def test_invalid_course_search(self):
         response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
+
+class CourseScheduling(TransactionTestCase):
+    def access_schedule_when_logged_in(self):
+        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client() # May be you have missed this line
+        self.client.login(username=self.user.username, password='pass@123')
+        # get_history function having login_required decorator
+        response = self.client.post(reverse('department'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 200)
+    
