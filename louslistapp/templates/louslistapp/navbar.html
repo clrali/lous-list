@@ -36,9 +36,9 @@
               {%endif%}
             </li>
             {% if user.is_authenticated %}
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="/profile/{{user.username}}">{{user.username}}'s Profile</a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
             </li>

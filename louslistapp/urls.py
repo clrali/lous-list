@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('', views.home, name='home'),
     path('home/', views.home, name='home'),
     path('login/', views.login, name='login'),
     path('department/', views.dept_dropdown, name='department'),
@@ -15,6 +16,6 @@ urlpatterns = [
     path('course-create/', CourseCreate.as_view(), name='course-create'),
     path('', TemplateView.as_view(template_name="login.html")),
     path('accounts/', include('allauth.urls')),
-    path('logout/', LogoutView.as_view()),
-    path('profile/<username>', views.profile, name="profile")
+    path('logout', LogoutView.as_view()),
+    # path('profile/<username>', views.profile, name="profile")
 ]

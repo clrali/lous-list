@@ -1,19 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import Http404
 import requests
-from django.utils import timezone
-from datetime import datetime, timedelta 
-from .models import Course, UserProfile
+from .models import Course
 from .forms import CourseSelected
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
-<<<<<<< HEAD
-from django.contrib.auth.models import User
-=======
 import re
 
->>>>>>> 31b538d5d6e3fc4ec96bf90f023b9052647e5e8a
 
 def home(request):
     return render(request, 'louslistapp/home.html')
@@ -48,13 +41,6 @@ def dept_dropdown(request):
         # This will make sure that all sections of a course are grouped together
         all_courses = {}
         for course in courses:
-            if course['meetings'][0]['start_time'] == "":
-                startTime = "00.00.00"
-                endTime = "00.00.00"
-            else:
-                startTime = (course['meetings'][0]['start_time'])[:8]
-                endTime = (course['meetings'][0]['end_time'])[:8]
-
             obj, course_data = Course.objects.get_or_create(
                 prof_name=course['instructor']['name'],
                 prof_email=course['instructor']['email'],
@@ -124,13 +110,6 @@ def course_detail(request, id):
     return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
 
 
-def profile(request, username):
-	try:
-		user = User.objects.get(username=username)
-	except:
-		raise Http404
-
-	return render(request, 'louslistapp/profile.html', {"profile": user})
 def create_schedule(request):
     # start_time and end_time are strings but sorting still works (might be better to switch these DateTimeFields)
     courses = list(Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time'))

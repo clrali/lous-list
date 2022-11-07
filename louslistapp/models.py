@@ -31,13 +31,8 @@ class Course(models.Model):
     enrollment_total = models.IntegerField(default=0)
     enrollment_available = models.IntegerField(default=0)
     days = models.CharField(max_length=100)
-<<<<<<< HEAD
-    start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField(default=timezone.now)
-=======
-    start_time = models.CharField(max_length=100, default=None)
-    end_time = models.CharField(max_length=100, default=None)
->>>>>>> 31b538d5d6e3fc4ec96bf90f023b9052647e5e8a
+    start_time = models.CharField(max_length=100, blank=True, null=True)
+    end_time = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=100)
     selected = models.BooleanField(default=False)
 
@@ -52,14 +47,6 @@ class Instructor(models.Model):
 
     def __str__(self) -> str:
         return self.prof_name
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
-    bio = models.TextField(default="this is my bio")
-    
-    def __str__(self) -> str:
-        return self.user.username
 
 # class Student(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
