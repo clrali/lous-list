@@ -78,4 +78,3 @@ class CourseSchedulingTest(TransactionTestCase):
         response = self.client.get(('schedule'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "louslistapp/schedule.html")
-    
