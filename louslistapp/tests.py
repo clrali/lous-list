@@ -7,9 +7,6 @@ from django.test import TestCase, RequestFactory, Client, TransactionTestCase
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
 
-
-
-
 # Create your tests here.
 
 class SearchFunctionalityTest(TestCase):
@@ -59,16 +56,24 @@ class URLTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 class CourseDisplayTest(TestCase):
-    def test_invalid_course_search(self):
-        response = self.client.get('/department/?q=APMA&n=&p=hagrid')
-        self.assertEqual(response.status_code, 200)
-
-class CourseScheduling(TransactionTestCase):
-    def access_schedule_when_logged_in(self):
+    def access_departments_when_logged_in(self):
         self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
         self.client = Client() # May be you have missed this line
         self.client.login(username=self.user.username, password='pass@123')
         # get_history function having login_required decorator
         response = self.client.post(reverse('department'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 200)
+
+    def test_invalid_course_search(self):
+        response = self.client.get('/department/?q=APMA&n=&p=hagrid')
+        self.assertEqual(response.status_code, 200)
+
+class CourseScheduling(TransactionTestCase):   
+    def access_schedule_when_logged_in(self):
+        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client() # May be you have missed this line
+        self.client.login(username=self.user.username, password='pass@123')
+        # get_history function having login_required decorator
+        response = self.client.get(('schedule'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 200)
     
