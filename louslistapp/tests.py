@@ -98,8 +98,10 @@ class ScheduleBuilderTest(TransactionTestCase):
 
         response = self.client.post(reverse('create-schedule'), {'user_id': self.user.id})
 
-        print(response)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "louslistapp/schedule.html")
+        self.assertEqual(response, 3)
+
 
 
 '''class CourseScheduling(TransactionTestCase):
