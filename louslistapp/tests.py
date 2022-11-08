@@ -57,20 +57,26 @@ class URLTest(TestCase):
 
 
 class CourseDisplayTest(TestCase):
-    def test_to_access_departments_when_logged_in(self):
-        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
+    def test_to_access_my_courses_when_logged_in(self):
+        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
         self.client = Client() 
         self.client.login(username=self.user.username, password='pass@123')
-        response = self.client.post(reverse('department'), {'user_id': self.user.id})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "louslistapp/displayCourses.html")
+        response = self.client.get(('/selected-courses'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 301)
 
     def test_invalid_course_search(self):
         response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
 
 
-class CourseSchedulingTest(TransactionTestCase):   
+class CourseSchedulingTest(TransactionTestCase):  
+    def test_to_access_schedule_when_logged_in(self):
+        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client() 
+        self.client.login(username=self.user.username, password='pass@123')
+        response = self.client.post(reverse('create-schedule'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 200)
+
     def test_to_access_schedule_when_not_logged_in(self):
         self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
         self.client = Client()
