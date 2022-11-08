@@ -55,25 +55,27 @@ class URLTest(TestCase):
         # verify that the  accounts url will send out a 200 HTTP status code
         self.assertEqual(response.status_code, 200)
 
+
 class CourseDisplayTest(TestCase):
-    def access_departments_when_logged_in(self):
+    def test_to_access_departments_when_logged_in(self):
         self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() # May be you have missed this line
+        self.client = Client() 
         self.client.login(username=self.user.username, password='pass@123')
-        # get_history function having login_required decorator
         response = self.client.post(reverse('department'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "louslistapp/displayCourses.html")
 
     def test_invalid_course_search(self):
         response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
 
-class CourseScheduling(TransactionTestCase):   
-    def access_schedule_when_logged_in(self):
+
+class CourseSchedulingTest(TransactionTestCase):   
+    def test_to_access_schedule_when_logged_in(self):
         self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() # May be you have missed this line
+        self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
-        # get_history function having login_required decorator
         response = self.client.get(('schedule'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "louslistapp/schedule.html")
     
