@@ -1,7 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from .models import Instructor, Course
 import requests
+from django.test import TestCase, RequestFactory, Client, TransactionTestCase
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
 
 # Create your tests here.
 
@@ -37,19 +41,8 @@ class InstructorModelTest(TestCase):
 
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
-"""
-    def test_course_search_instructor(self):
-        response = self.client.get('/department/?q=APMA&n=3100&p=')
-        courses = response.json()[1]
-        print(courses)
-        test_instructor = Instructor.objects.create(
-            prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
-        expected_instructor = Instructor.objects.create(
-            prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
 
-        self.assertNotEqual(test_instructor.prof_name,
-                            expected_instructor.prof_name, "The instructor is the same")
-"""
+
 class URLTest(TestCase):
     def test_URL(self):
         response = self.client.get('/')
@@ -62,7 +55,25 @@ class URLTest(TestCase):
         # verify that the  accounts url will send out a 200 HTTP status code
         self.assertEqual(response.status_code, 200)
 
+
 class CourseDisplayTest(TestCase):
+    def test_to_access_departments_when_logged_in(self):
+        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client() 
+        self.client.login(username=self.user.username, password='pass@123')
+        response = self.client.post(reverse('department'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "louslistapp/displayCourses.html")
+
     def test_invalid_course_search(self):
         response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
+
+
+class CourseSchedulingTest(TransactionTestCase):   
+    def test_to_access_schedule_when_not_logged_in(self):
+        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client()
+        response = self.client.post(('schedule'), {'user_id': self.user.id})
+        # should be 404 because page cannot be accessed when not logged in
+        self.assertEqual(response.status_code, 404)
