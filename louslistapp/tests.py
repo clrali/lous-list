@@ -71,10 +71,9 @@ class CourseDisplayTest(TestCase):
 
 
 class CourseSchedulingTest(TransactionTestCase):   
-    def test_to_access_schedule_when_logged_in(self):
+    def test_to_access_schedule_when_not_logged_in(self):
         self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
         self.client = Client()
-        self.client.login(username=self.user.username, password='pass@123')
-        response = self.client.get(('schedule'), {'user_id': self.user.id})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "louslistapp/schedule.html")
+        response = self.client.post(('schedule'), {'user_id': self.user.id})
+        # should be 404 because page cannot be accessed when not logged in
+        self.assertEqual(response.status_code, 404)
