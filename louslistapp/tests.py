@@ -5,6 +5,8 @@ import requests
 from django.test import TestCase, RequestFactory, Client, TransactionTestCase
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
+from . import views
+
 
 # Create your tests here.
 
@@ -93,16 +95,16 @@ class ScheduleBuilderTest(TransactionTestCase):
         self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
 
-        course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
+        # course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
 
         schedule = {'Other': [],
-                    'Monday': [course_1],
-                    'Tuesday': [course_2],
-                    'Wednesday': [course_1],
-                    'Thursday': [course_2],
-                    'Friday': [course_1]}
+                    'Monday': [],
+                    'Tuesday': [],
+                    'Wednesday': [],
+                    'Thursday': [],
+                    'Friday': []}
 
-        response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id})
+        response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id}, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.id, 1)
