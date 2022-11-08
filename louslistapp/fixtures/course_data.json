@@ -3,33 +3,6 @@
     "model": "louslistapp.course",
     "pk": 1,
     "fields": {
-      "user": 1,
-      "prof_name": "Derrick Stone",
-      "prof_email": "djs6d@virginia.edu",
-      "course_number": 16351,
-      "semester_code": 1228,
-      "course_section": "001",
-      "subject": "CS",
-      "catalog_number": "1010",
-      "description": "Introduction to Information Technology",
-      "units": "3",
-      "component": "LEC",
-      "class_capacity": 75,
-      "waitlist": 0,
-      "wait_cap": 199,
-      "enrollment_total": 72,
-      "enrollment_available": 3,
-      "days": "MoWe",
-      "start_time": "17.00.00.000000-05:00",
-      "end_time": "18.15.00.000000-05:00",
-      "location": "Olsson Hall 009",
-      "selected": true
-    }
-  },
-  {
-    "model": "louslistapp.course",
-    "pk": 2,
-    "fields": {
        "user": 1,
        "prof_name": "Jim Cohoon",
        "prof_email": "jpc@virginia.edu",
@@ -50,12 +23,12 @@
        "start_time": "14.00.00.000000-05:00",
        "end_time": "15.15.00.000000-05:00",
        "location": "Rice Hall 130",
-      "selected": true
+       "selected": true
     }
   },
   {
     "model": "louslistapp.course",
-    "pk": 3,
+    "pk": 2,
     "fields": {
        "user": 1,
        "prof_name": "Kevin Sullivan",
@@ -79,32 +52,5 @@
        "location": "Minor Hall 125",
        "selected": true
     }
-  },
-  {
-    "model": "louslistapp.course",
-    "pk": 4,
-    "fields": {
-       "user": 1,
-       "prof_name": "Kenneth Elzinga",
-       "prof_email": "kge8z@virginia.edu",
-       "course_number": 10385,
-       "semester_code": 1228,
-       "course_section": "090",
-       "subject": "ECON",
-       "catalog_number": "2010",
-       "description": "Principles of Economics: Microeconomics",
-       "units": "3",
-       "component": "LEC",
-       "class_capacity": 484,
-       "waitlist": 0,
-       "wait_cap": 0,
-       "enrollment_total": 466,
-       "enrollment_available": 18,
-       "days": "TuTh",
-       "start_time": "11.00.00.000000-05:00",
-       "end_time": "12.15.00.000000-05:00",
-       "location": "Chemistry Bldg 402",
-       "selected": true
-     }
   }
 ]

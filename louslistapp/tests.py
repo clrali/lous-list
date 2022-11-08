@@ -81,34 +81,35 @@ class ScheduleBuilderTest(TransactionTestCase):
     fixtures = ['course_data.json', 'user_data.json']
 
     def test_course_data_retrieval(self):
-        # self.client.login(username=self.user.username, password='pass@123')
         self.user = User.objects.get(pk=1)
         self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
 
         course = Course.objects.get(pk=1)
-        self.assertEqual(course.description, "Introduction to Information Technology")
+        self.assertEqual(course.description, "Introduction to Programming")
 
     def test_valid_schedule(self):
         self.user = User.objects.get(pk=1)
         self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
 
-        self.assertEqual(self.user.id, 1)
+        course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
 
-        response = self.client.post(reverse('create-schedule'), {'user_id': self.user.id})
+        schedule = {'Other': [],
+                    'Monday': [course_1],
+                    'Tuesday': [course_2],
+                    'Wednesday': [course_1],
+                    'Thursday': [course_2],
+                    'Friday': [course_1]}
+
+        response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id})
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.id, 1)
+
         self.assertTemplateUsed(response, "louslistapp/schedule.html")
-        self.assertEqual(response, 3)
 
-
-
-'''class CourseScheduling(TransactionTestCase):
-    def access_schedule_when_logged_in(self):
-        self.user = User.objects.create(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() # May be you have missed this line
-        self.client.login(username=self.user.username, password='pass@123')
-        # get_history function having login_required decorator
-        response = self.client.post(reverse('department'), {'user_id': self.user.id})
-        self.assertEqual(response.status_code, 200) '''
+        self.assertEqual(response.context['message'], 'This is a valid schedule')
+        self.assertEqual(response.context['schedule'], schedule)
+        self.assertEqual(response.context['duplicate_courses'], None)
+        self.assertEqual(response.context['course_time_conflicts'], None)
