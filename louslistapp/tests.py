@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from .models import Instructor, Course
@@ -6,13 +5,16 @@ import requests
 from django.test import TestCase, RequestFactory, Client, TransactionTestCase
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
+from . import views
+
 
 # Create your tests here.
 
+
 class SearchFunctionalityTest(TestCase):
     def test_if_search_links_to_correct_page(self):
-        response=self.client.get(reverse('department'))
-        self.assertEqual(response.status_code, 200) 
+        response = self.client.get(reverse('department'))
+        self.assertEqual(response.status_code, 200)
 
 
 class InstructorModelTest(TestCase):
@@ -43,6 +45,20 @@ class InstructorModelTest(TestCase):
                             expected_instructor.prof_name, "The instructor is the same")
 
 
+"""
+    def test_course_search_instructor(self):
+        response = self.client.get('/department/?q=APMA&n=3100&p=')
+        courses = response.json()[1]
+        print(courses)
+        test_instructor = Instructor.objects.create(
+            prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
+        expected_instructor = Instructor.objects.create(
+            prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
+
+        self.assertNotEqual(test_instructor.prof_name,
+                            expected_instructor.prof_name, "The instructor is the same")
+"""
+
 class URLTest(TestCase):
     def test_URL(self):
         response = self.client.get('/')
@@ -68,6 +84,43 @@ class CourseDisplayTest(TestCase):
         response = self.client.get('/department/?q=APMA&n=&p=hagrid')
         self.assertEqual(response.status_code, 200)
 
+
+class ScheduleBuilderTest(TransactionTestCase):
+    fixtures = ['course_data.json', 'user_data.json']
+
+    def test_course_data_retrieval(self):
+        self.user = User.objects.get(pk=1)
+        self.client = Client()
+        self.client.login(username=self.user.username, password='pass@123')
+
+        course = Course.objects.get(pk=1)
+        self.assertEqual(course.description, "Introduction to Programming")
+
+    def test_valid_schedule(self):
+        self.user = User.objects.get(pk=1)
+        self.client = Client()
+        self.client.login(username=self.user.username, password='pass@123')
+
+        # course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
+
+        schedule = {'Other': [],
+                    'Monday': [],
+                    'Tuesday': [],
+                    'Wednesday': [],
+                    'Thursday': [],
+                    'Friday': []}
+
+        response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user.id, 1)
+
+        self.assertTemplateUsed(response, "louslistapp/schedule.html")
+
+        self.assertEqual(response.context['message'], 'This is a valid schedule')
+        self.assertEqual(response.context['schedule'], schedule)
+        self.assertEqual(response.context['duplicate_courses'], None)
+        self.assertEqual(response.context['course_time_conflicts'], None)
 
 class CourseSchedulingTest(TransactionTestCase):  
     def test_to_access_schedule_when_logged_in(self):

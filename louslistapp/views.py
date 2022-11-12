@@ -112,7 +112,7 @@ def course_detail(request, id):
 
 def create_schedule(request):
     # start_time and end_time are strings but sorting still works (might be better to switch these DateTimeFields)
-    courses = list(Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time'))
+    courses = list(Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time'))
     print(courses)
 
     days_map = {'Mo': 'Monday', 'Tu': 'Tuesday', 'We': 'Wednesday', 'Th': 'Thursday', 'Fr': 'Friday'}
@@ -191,3 +191,4 @@ def check_validity(courses):
             time_conflicts.append((courses[i - 1], courses[i]))
 
     return time_conflicts
+
