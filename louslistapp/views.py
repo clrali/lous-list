@@ -191,3 +191,4 @@ def check_validity(courses):
             time_conflicts.append((courses[i - 1], courses[i]))
 
     return time_conflicts
+
