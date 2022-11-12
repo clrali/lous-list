@@ -5,8 +5,7 @@
 <title>Department Search</title>
 <div class="container">
   <div class="text-center container">
-    <br />
-    <h2 class="text-center">Search for your Class</h2>
+    <h1 class="text-center m-3">Course Search</h1>
     <div class="container mt-3">
       <form action="/department/" method="GET">
         <div class="d-flex justify-content-center mt-3">
@@ -54,7 +53,6 @@
         </div>
       </form>
     </div>
-    <br /><br />
     <div class="row">
       {% if all_courses %} {% for course in all_courses %}
       <div class="col-md-4 col-sm-6 col-lg-3 mt-5">
@@ -70,7 +68,7 @@
               ><input
                 type="submit"
                 value="Learn More"
-                class="btn btn-danger btn-sm"
+                class="btn btn-info btn-sm"
                 type="button"
             /></a>
             <br>

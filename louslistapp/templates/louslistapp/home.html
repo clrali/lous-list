@@ -1,5 +1,10 @@
-{% extends 'louslistapp/navbar.html' %} {% block content %}
-<h1>Home Page</h1>
-{% if user.is_authenticated %}
-<p>Welcome, {{ user.username }}!</p>
-{% endif %} {% endblock %}
+{% extends 'louslistapp/navbar.html' %} 
+
+{% block content %}
+<div style="text-align: center">
+  <h1 class="m-3">Home Page</h1>
+  {% if user.is_authenticated %}
+  <p>Welcome, {{ user.socialaccount_set.all.0.extra_data.name }}!</p>
+  {% endif %}
+</div>
+{% endblock %}

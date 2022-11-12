@@ -1,0 +1,7 @@
+{% extends 'louslistapp/navbar.html' %}
+
+{% block content %}
+{% for obj in qs %}
+<p>{{obj.courses}}</p>
+{% endfor %}
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'louslistapp/navbar.html' %} {% load static %} {% block content %}
+<link
+  rel="stylesheet"
+  href="{% static '/louslistapp/profileList_style.css' %}"
+/>
+
+<h1>Incoming Friend Requests</h1>
+
+{% if is_empty %}
+<br/>
+<h3>No incoming friend requests!</h3>
+
+{% else %} {%for item in qs %}
+<div class="col-sm-12">
+  <div class="card mx-auto">
+    <img
+      class="card-img-top"
+      src="{{ item.user.socialaccount_set.all.0.get_avatar_url }}"
+    />
+    <div class="card-body">
+      <h3>{{item}}</h3>
+      <button type="submit" class="btn btn-info btn-sm mb-5 w-big">
+        See Profile
+      </button>
+
+      <form action="{% url 'accept-invite' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="profile_pk" value="{{item.pk}}" />
+        <button type="submit" class="btn btn-success btn-sm mb-5 w-big">
+          Accept Invite
+        </button>
+      </form>
+
+      <form action="{% url 'reject-invite' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="profile_pk" value="{{item.pk}}" />
+        <button type="submit" class="btn btn-danger btn-sm mb-5 w-big">
+          Reject Invite
+        </button>
+      </form>
+    </div>
+  </div>
+  <br />
+  {% endfor %}
+</div>
+{% endif %} {% endblock %}
