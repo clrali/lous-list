@@ -7,9 +7,10 @@
 </div>
 
 <div>
+  <h3>Your Friends</h>
   {% if account.get_friends %}
   {% for friend in account.get_friends %}
-  {{friend}}
+  <p>{{friend}}</p>
   <br/>
   {% endfor %}
   Friends number: {{account.get_friends_count}}

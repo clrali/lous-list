@@ -209,6 +209,11 @@ def userPage(request):
     context = {'account': account, 'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
     return render(request, 'louslistapp/profile.html', context)
 
+def myFriends(request):
+    account = Account.objects.get(user=request.user)
+    context = {'friends': account}
+    return render(request, 'louslistapp/my_friends.html', context)
+
 def invitesReceived(request):
     account = Account.objects.get(user=request.user)
     # gets all the friend invitations for the current user
