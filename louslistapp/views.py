@@ -199,14 +199,13 @@ def check_validity(courses):
 
 @login_required(login_url='login/')
 def userPage(request):
-    account = Account.objects.get(user=request.user)
     courses = Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time')
     total_courses = courses.count()
     total_credits = 0
     for c in courses:
         total_credits += int(c.units)
     print('courses', courses)
-    context = {'account': account, 'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
+    context = {'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
     return render(request, 'louslistapp/profile.html', context)
 
 def myFriends(request):
