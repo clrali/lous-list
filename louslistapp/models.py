@@ -1,15 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
-
+from django.conf import settings
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
+from django.db.models import Q
+from django.db.models.signals import post_save
 # Create your models here.
-
-
-class account(User):
-    cart = models.ManyToManyField("Course")
-
 
 class Course(models.Model):
     user = models.ForeignKey(
@@ -48,41 +44,94 @@ class Instructor(models.Model):
     def __str__(self) -> str:
         return self.prof_name
 
-# class Student(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#     email = models.CharField(max_length=100)
-#     @receiver(models.signals.post_save, sender=get_user_model())
-#     def create_student_user(sender, instance, created, **kwargs):
-#         if created:
-#             Student.objects.create(user=instance)
+class AccountManager(models.Manager):
 
+    def get_all_profiles_to_invite(self, sender):
+        accounts = Account.objects.all().exclude(user=sender)
+        account = Account.objects.get(user=sender)
+        qs = Relationship.objects.filter(Q(sender=account) | Q(receiver=account))
+        print(qs)
+        
+        # list of all accepted friend invitations
+        accepted = set([])
+        for rel in qs:
+            if rel.status == 'accepted':
+                accepted.add(rel.receiver)
+                accepted.add(rel.sender)
+        print("accepted friends: ", accepted)
 
-class Schedule(models.Model):
-    name = models.CharField(max_length=100, default="Schedule 1")
-    courses = models.ManyToManyField(Course, blank=True, related_name="schedules")
-    schedule_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", null=True)
+        # list of all available profiles to invite
+        available = [account for account in accounts if account not in accepted]
+        print("available accounts: ", available)
+        return available
+
+    def get_all_profiles(self, me):
+        # get all profiles except for your own
+        accounts = Account.objects.all().exclude(user=me)
+        return accounts
+
+class Account(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, null=True)
+    friends = models.ManyToManyField(User, related_name='friends', blank=True)
+    courses = models.ManyToManyField(Course, related_name='courses', blank=True)
+
+    objects = AccountManager()
+
+    def get_friends(self):
+        return self.friends.all()
     
+    def get_friends_count(self):
+        return self.friends.all().count()
+    
+    def get_courses(self):
+        return self.courses.all()
+    
+    def get_course_count(self):
+        return self.courses.all().count()
+
     def __str__(self):
-        return self.name
-    
-    @classmethod
-    def add_course(cls, current_user, new_course):
-        schedule, created = cls.objects.get_or_create(
-            schedule_owner=current_user
-        )
-        schedule.courses.add(new_course)
-    
-    @classmethod
-    def remove_course(cls, current_user, new_course):
-        schedule, created = cls.objects.get_or_create(
-            schedule_owner=current_user
-        )
-        schedule.courses.remove(new_course)
-    
-#class User(AbstractUser):
- #   cart = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+        return str(self.user)
 
-# class Profile(models.Model):
-#     email = models.CharField(max_length=100)
-#     username = models.CharField(max_length=100, default = "Guest")
-#     schedules = models.ManyToManyField(Schedule, blank=True)
+# name on left is for database, name on right is human-readable in admin 
+STATUS_CHOICES = (
+    ('send', 'send'),
+    ('accepted', 'accepted'),
+)
+
+class RelationshipManager(models.Manager):
+    def invitations_received(self, receiver):
+        qs = Relationship.objects.filter(receiver=receiver, status='send')
+        return qs
+    
+
+class Relationship(models.Model):
+    sender = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='receiver')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+
+    objects = RelationshipManager()
+
+    def __str__(self) -> str:
+        return f"{self.sender}-{self.receiver}-{self.status}"
+
+# class Schedule(models.Model):
+#     courses = models.ManyToManyField(Course, related_name="classes", blank=True)
+#     owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='schedule')
+
+#     def __str__(self) -> str:
+#         return str(self.owner)
+
+#     def num_courses(self):
+#         return self.courses.all().count()
+    
+#     def num_comments(self):
+#         return self.comment_set.all().count()
+
+# class Comment(models.Model):
+#     user = models.ForeignKey(Account, on_delete=models.CASCADE)
+#     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+#     body = models.TextField(max_length=300)
+
+#     def __str__(self) -> str:
+#         return str(self.pk)

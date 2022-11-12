@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 # needed for Google authentication
-SITE_ID = 2
+SITE_ID = 3
 LOGIN_REDIRECT_URL = "/department"
 
 # Additional configuration settings
@@ -109,6 +109,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST_NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

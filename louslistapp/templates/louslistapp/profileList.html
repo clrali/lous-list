@@ -1,0 +1,55 @@
+{% extends 'louslistapp/navbar.html' %} {%load static%} {% block content %}
+<link
+  rel="stylesheet"
+  href="{% static '/louslistapp/profileList_style.css' %}"
+/>
+
+<h1>All Profiles</h1>
+{% if is_empty %}
+<p>There are no accounts available for you to friend</p>
+{% endif %} 
+
+{%for item in qs %}
+<div class="col-sm-12">
+  <div class="card mx-auto">
+    <img
+      class="card-img-top"
+      src="{{ item.user.socialaccount_set.all.0.get_avatar_url }}"
+    />
+    <div class="card-body">
+      <h3>{{ item.user }}</h3>
+      <button type="submit" class="btn btn-info btn-sm mb-5 w-big">
+        See Profile
+      </button>
+
+      {% if item.user not in rel_receiver and item.user not in rel_sender %}
+      <form action="{% url 'send-invite' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="profile_pk" value="{{item.pk}}" />
+        <button type="submit" class="btn btn-success btn-sm mb-5 w-big">
+          Add to Friends
+        </button>
+      </form>
+      {% endif %} 
+      
+      {% if item.user in rel_receiver and request.user not in item.friends.all %}
+      <button disabled class="mb-5 w-big">
+        Waiting for approval
+      </button>
+      {% endif %} 
+      
+      {% if request.user in item.friends.all %}
+      <form action="{% url 'remove-friend' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="profile_pk" value="{{item.pk}}" />
+        <button type="submit" class="btn btn-danger btn-sm mb-5 w-big">
+          Remove from Friends
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <br />
+  {% endfor %}
+</div>
+{% endblock %}

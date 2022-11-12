@@ -1,11 +1,73 @@
-<!-- {% extends "louslistapp/navbar.html" %} 
-{% load socialaccount %} 
-
+{% extends "louslistapp/navbar.html" %} {% load socialaccount %}
 {% block content %}
 <div class="row my-3 p-3">
-  <h1>Welcome, {{ profile.username }}!</h1>
   {% if user.is_authenticated %}
-  <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+  <h1>Welcome, {{ user.socialaccount_set.all.0.extra_data.name }}!</h1>
   {% endif %}
 </div>
-{% endblock %} -->
+
+<div>
+  {% if account.get_friends %}
+  {% for friend in account.get_friends %}
+  {{friend}}
+  <br/>
+  {% endfor %}
+  Friends number: {{account.get_friends_count}}
+  {% else %}
+  Friends number: {{account.get_friends_count}}
+  There are no friends!
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="col-md">
+      <div class="card text-center mb-3" id="total-classes">
+        <div class="card-header">
+          <h5 class="card-title">Total Classes</h5>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">{{total_courses}}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="col-md">
+      <div class="card text-center mb-3" id="total-credits">
+        <div class="card-header">
+          <h5 class="card-title">Total Credits</h5>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">{{total_credits}}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-md">
+    <div class="card card-body text-center">
+      <h2>My Courses</h2>
+      <table class="table table-sm text-center">
+        <tr>
+          <th>Course</th>
+          <th>Professor</th>
+          <th>Days Held</th>
+          <th>Time Held</th>
+          <th>Units</th>
+        </tr>
+        {% for course in courses %}
+        <tr>
+          <td><a href="{% url 'course' course.id %}">{{course.subject}} {{course.catalog_number}}</a></td>          <td>{{course.prof_name}}</td>
+          <td>{{course.days}}</td>
+          <td>{{course.start_time}} - {{course.end_time}}</td>
+          <td>{{course.units}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
