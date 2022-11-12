@@ -1,69 +1,76 @@
-{% extends 'louslistapp/navbar.html' %}
-{% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
-{% bootstrap_messages %} {% load socialaccount %}
+{% extends 'louslistapp/navbar.html' %} {% load bootstrap5 %} {% bootstrap_css%} 
+{% bootstrap_javascript %} {% bootstrap_messages %} {% load socialaccount %}
 {% block content %}
 
 <html>
-<body>
-
-    <div class = "container"> 
-        <br><br>
-        <div class="row"> 
-            <div class="col-md-5">
-              <br><br>
-              <h3 class="card-title text-center">{{ course.description }}</h3>
-              <button onclick="history.back()">Go Back</button>
-            </div> 
-            <div class="col-md-7 shadow-lg p-3 mb-5 bg-white rounded">
-              <h1 class="my-3">Class Description</h1>
-              <p class = "lead">{{ course.description }} class taught by {{ course.prof_name }}.</p>
-              <h1 class="my-3">Class Details</h1>
-              <p>Waitlist: {{ course.waitlist }}/{{ course.wait_cap }}</p>
-              <p>Open seats: {{ course.enrollment_available }}/{{ course.enrollment_total }}</p>
-              <p>Days taught: {{ course.days }}</p>
-              <p>Location: {{ course.location }}</p>
-              </ul>
-                <a href="#" onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')">
-                 <img alt="CourseForum" src="https://thecourseforum.com/static/base/img/new_logo.png" width=40" height="40">
-              </a>
-            </div>
-
+  <body>
+    <div class="container">
+      <br /><br />
+      <div class="row">
+        <div class="col-md-5">
+          <br /><br />
+          <h3 class="card-title text-center">{{ course.description }}</h3>
+          <button onclick="history.back()">Go Back</button>
         </div>
-        <style>
-          .hide {
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            width: 1px;
-            height: 1px;
-          }
-        </style>
-        <iframe name="hiddenFrame" class="hide"></iframe>
-        <form method="POST" target="hiddenFrame">
-            {% csrf_token %} {{ form2 }}
-            {% if course.selected == True %}
-          <button
-            type="submit"
-            class="btn btn-danger btn-sm"
-            onClick= "return confirm('Remove {{course.description}} from schedule?')"
-          >Remove from Schedule</button>
-          {% else %}
-          <button
+        <div class="col-md-7 shadow-lg p-3 mb-5 bg-white rounded">
+          <h1 class="my-3">Class Description</h1>
+          <p class="lead">
+            {{ course.description }} class taught by {{ course.prof_name }}.
+          </p>
+          <h1 class="my-3">Class Details</h1>
+          <p>Waitlist: {{ course.waitlist }}/{{ course.wait_cap }}</p>
+          <p>
+            Open seats: {{ course.enrollment_available }}/{{course.enrollment_total }}
+          </p>
+          <p>Days taught: {{ course.days }}</p>
+          <p>Location: {{ course.location }}</p>
+          <a
+            href="#"
+            onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')"
+          >
+            <img alt="CourseForum"
+            src="https://thecourseforum.com/static/base/img/new_logo.png"
+            width=40" height="40">
+          </a>
+        </div>
+      </div>
+      <style>
+        .hide {
+          position: absolute;
+          top: -1px;
+          left: -1px;
+          width: 1px;
+          height: 1px;
+        }
+      </style>
+      <iframe name="hiddenFrame" class="hide"></iframe>
+      <form method="POST" target="hiddenFrame">
+        {% csrf_token %} {{ form2 }} {% if course.selected == True %}
+        <button
           type="submit"
           class="btn btn-danger btn-sm"
-          onClick= "return confirm('Add {{course.description}} to schedule')"
-        >Add to Schedule</button>
+          onClick="return confirm('Remove {{course.description}} from schedule?')"
+        >
+          Remove from Schedule
+        </button>
+        {% else %}
+        <button
+          type="submit"
+          class="btn btn-success btn-sm"
+          onClick="return confirm('Add {{course.description}} to schedule')"
+        >
+          Add to Schedule
+        </button>
         {% endif %}
-        </form>
-    </div>    
-{% endblock %}
+      </form>
+    </div>
+    {% endblock %}
 
-
-<script>
-  function myFunction2(p1, p2) {
-        window.location = "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
+    <script>
+      function myFunction2(p1, p2) {
+        window.location =
+          "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
       }
-</script>
-
-</body>
+    </script>
+  </body>
 </html>

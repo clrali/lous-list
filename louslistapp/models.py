@@ -115,23 +115,20 @@ class Relationship(models.Model):
     def __str__(self) -> str:
         return f"{self.sender}-{self.receiver}-{self.status}"
 
-# class Schedule(models.Model):
-#     courses = models.ManyToManyField(Course, related_name="classes", blank=True)
-#     owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='schedule')
+# choices when adding classes to a schedule
+SCHED_CHOICES = (
+    ('added', 'added'),
+    ('removed', 'removed')
+)
 
-#     def __str__(self) -> str:
-#         return str(self.owner)
+class ScheduleManager(models.Manager):
+    def courses_received(self, receiver):
+        qs = Schedule.objects.filter(receiver=receiver, status='accepted')
 
-#     def num_courses(self):
-#         return self.courses.all().count()
-    
-#     def num_comments(self):
-#         return self.comment_set.all().count()
+class Schedule(models.Model):
+    addCourse = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='add_course')
+    addedCourse = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='added_course')
+    status = models.CharField(max_length=10, choices=SCHED_CHOICES)
 
-# class Comment(models.Model):
-#     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-#     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
-#     body = models.TextField(max_length=300)
+    objects = ScheduleManager()
 
-#     def __str__(self) -> str:
-#         return str(self.pk)
