@@ -1,15 +1,16 @@
 {% extends 'louslistapp/navbar.html' %} {% block content %}
 <div>
+  <h3>Friend Count</h3>
+  Friends number: {{account.get_friends_count}}
   <h3>Your Friends</h3>
   {% if account.get_friends %} 
   {% for friend in account.get_friends %}
   <p>{{friend}}</p>
   <br />
   {% endfor %} 
-  {% endif %}
-  <h3>Friend Count</h3> 
+  {% else %} 
   Friends number: {{account.get_friends_count}} 
-  Friends number: {{account.get_friends_count}} There are no friends! 
+  There are no friends! {% endif %}
 </div>
 
 {% endblock %}

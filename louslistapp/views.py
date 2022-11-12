@@ -211,7 +211,7 @@ def userPage(request):
 
 def myFriends(request):
     account = Account.objects.get(user=request.user)
-    context = {'friends': account}
+    context = {'account': account}
     return render(request, 'louslistapp/my_friends.html', context)
 
 def invitesReceived(request):
