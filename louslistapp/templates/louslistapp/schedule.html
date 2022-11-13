@@ -3,7 +3,7 @@
 {% load time_converter %}
 
 {% block content %}
-<div class="m-3" style="text-align:center;">
+<div class="m-4" style="text-align:center;">
     <h1>Schedule</h1>
 </div>
 
@@ -34,12 +34,12 @@
 
     {% if schedule %}
     {% for key, value in schedule.items %}
-    <div class="card m-2">
+    <div class="card m-2 bg-dark text-white">
         <div class="card-body">
             <h3 class="card-title">{{ key }}</h3>
             {% for course in value %}
-            <div class="card bg-light text-dark m-3">
-                <div class="card-header h6">
+            <div class="card text-dark m-3" style="background-color: #e6f5ff;">
+                <div class="card-header h6" style="background-color: #ccebff;">
                     <div class="row justify-content-between">
                         <div class="col-6">
                             <h5>{{ course.description}} | {{ course.subject }} {{ course.catalog_number }}</h5>
