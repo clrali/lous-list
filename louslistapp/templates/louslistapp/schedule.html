@@ -1,9 +1,12 @@
 {% extends 'louslistapp/navbar.html' %}
 
 {% load time_converter %}
+{% load static %}
 
 {% block content %}
-<div class="m-4" style="text-align:center;">
+<link rel="stylesheet" href="{% static 'louslistapp/general_style.css' %}">
+
+<div class="m-4 text-center">
     <h1>Schedule</h1>
 </div>
 
@@ -38,8 +41,8 @@
         <div class="card-body">
             <h3 class="card-title">{{ key }}</h3>
             {% for course in value %}
-            <div class="card text-dark m-3" style="background-color: #e6f5ff;">
-                <div class="card-header h6" style="background-color: #ccebff;">
+            <div class="card text-dark m-3 bg-light-blue">
+                <div class="card-header h6 bg-medium-blue">
                     <div class="row justify-content-between">
                         <div class="col-6">
                             <h5>{{ course.description}} | {{ course.subject }} {{ course.catalog_number }}</h5>
