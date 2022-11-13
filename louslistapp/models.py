@@ -114,24 +114,3 @@ class Relationship(models.Model):
 
     def __str__(self) -> str:
         return f"{self.sender}-{self.receiver}-{self.status}"
-
-# class Schedule(models.Model):
-#     courses = models.ManyToManyField(Course, related_name="classes", blank=True)
-#     owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='schedule')
-
-#     def __str__(self) -> str:
-#         return str(self.owner)
-
-#     def num_courses(self):
-#         return self.courses.all().count()
-    
-#     def num_comments(self):
-#         return self.comment_set.all().count()
-
-# class Comment(models.Model):
-#     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-#     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
-#     body = models.TextField(max_length=300)
-
-#     def __str__(self) -> str:
-#         return str(self.pk)

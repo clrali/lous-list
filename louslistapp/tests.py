@@ -108,7 +108,9 @@ class ScheduleBuilderTest(TransactionTestCase):
                     'Tuesday': [],
                     'Wednesday': [],
                     'Thursday': [],
-                    'Friday': []}
+                    'Friday': [],
+                    'Saturday': [],
+                    'Sunday': []}
 
         response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id}, follow=True)
 

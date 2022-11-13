@@ -43,6 +43,18 @@ def dept_dropdown(request):
         # This will make sure that all sections of a course are grouped together
         all_courses = {}
         for course in courses:
+            meetDays, start_time, end_time, location = '', '', '', ''
+            if len(course['meetings']) == 0:
+                days = 'tbd'
+                start_time = 'tbd'
+                end_time = 'tbd'
+                location = 'tbd'
+            else:
+                days = course['meetings'][0]['days']
+                start_time = course['meetings'][0]['start_time']
+                end_time = course['meetings'][0]['end_time']
+                location = course['meetings'][0]['facility_description']
+
             obj, course_data = Course.objects.get_or_create(
                 prof_name=course['instructor']['name'],
                 prof_email=course['instructor']['email'],
@@ -59,10 +71,10 @@ def dept_dropdown(request):
                 wait_cap=course['wait_cap'],
                 enrollment_total=course['enrollment_total'],
                 enrollment_available=course['enrollment_available'],
-                days=course['meetings'][0]['days'],
-                start_time=course['meetings'][0]['start_time'],
-                end_time=course['meetings'][0]['end_time'],
-                location=course['meetings'][0]['facility_description']
+                days=days,
+                start_time=start_time,
+                end_time=end_time,
+                location=location
             )
         if course_num == "" and professor_name == "":
             all_courses = Course.objects.filter(
@@ -110,7 +122,6 @@ def course_detail(request, id):
             else:
                 # remove it from the course list
                 account.courses.remove(course)
-
             account.save()
 
     return render(request, 'louslistapp/course_detail.html', {'course': course,
@@ -228,7 +239,7 @@ def userPage(request, id):
             total_courses = friend_account.get_course_count()
             total_credits = 0
             for c in friend_account.get_courses():
-                total_credits += int(c.units)
+                total_credits += int(c.units[0])
         # print("Actual User:", request.user, request.user.id)
         # print("Friend User:", user, user.id)
             context = {'account': friend_account,
@@ -238,16 +249,6 @@ def userPage(request, id):
                        'friend_user': friend_user}
             return render(request, 'louslistapp/profile.html', context)
 
-
-def userPage(request):
-    courses = Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time')
-    total_courses = courses.count()
-    total_credits = 0
-    for c in courses:
-        total_credits += int(c.units)
-    print('courses', courses)
-    context = {'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
-    return render(request, 'louslistapp/profile.html', context)
 
 
 def myFriends(request):
@@ -366,38 +367,3 @@ def remove_from_friends(request):
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('/profile')
-
-# def schedule_comment_create_and_list_view(request):
-#     owner = Account.objects.get(user=request.user)
-#     qs = Schedule.objects.filter(owner=owner)
-#     print(qs)
-
-#     context ={
-#         'qs': qs,
-#     }
-
-#     return render(request, 'louslistapp/testingschedule.html', context)
-
-# def add_remove_courses(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         schedule_id = request.POST.get('schedule_id')
-#         print(schedule_id)
-#         schedele_object = Schedule.objects.get(id=schedule_id)
-#         course = Course.objects.get(user=user)
-
-#         if course in schedele_object.courses.all():
-#             schedele_object.courses.remove(course)
-#         else:
-#             schedele_object.courses.add(course)
-        
-#         course, created = Course.objects.get_or_create(user=user, schedule_id=schedule_id)
-
-#         if not created:
-#             if course.selected == True:
-#                 course.selected = False
-#             else:
-#                 course.selected = True
-
-#             schedele_object.save()
-#             course.save()
