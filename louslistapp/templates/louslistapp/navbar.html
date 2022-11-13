@@ -32,7 +32,8 @@
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="/profile"><img
+                <a class="nav-link" href="{% url 'profile' user.id %}"><img
+                  class="rounded-circle"
                   src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
                   alt="User avatar"
                   width="45"

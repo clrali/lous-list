@@ -114,21 +114,3 @@ class Relationship(models.Model):
 
     def __str__(self) -> str:
         return f"{self.sender}-{self.receiver}-{self.status}"
-
-# choices when adding classes to a schedule
-SCHED_CHOICES = (
-    ('added', 'added'),
-    ('removed', 'removed')
-)
-
-class ScheduleManager(models.Manager):
-    def courses_received(self, receiver):
-        qs = Schedule.objects.filter(receiver=receiver, status='accepted')
-
-class Schedule(models.Model):
-    addCourse = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='add_course')
-    addedCourse = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='added_course')
-    status = models.CharField(max_length=10, choices=SCHED_CHOICES)
-
-    objects = ScheduleManager()
-

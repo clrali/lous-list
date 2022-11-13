@@ -1,8 +1,18 @@
 {% extends "louslistapp/navbar.html" %} {% load socialaccount %}
+{% load time_converter %}
 {% block content %}
-<div class="row my-3 p-3">
-  {% if user.is_authenticated %}
-  <h1>Welcome, {{ user.socialaccount_set.all.0.extra_data.name }}!</h1>
+
+<div class="row my-3 p-3 text-center">
+  {% if error_message %}
+  <h1>{{ error_message }}</h1>
+  {% else %}
+
+  {% if actual_user.is_authenticated %}
+    {% if actual_user.id == friend_user.id %}
+    <h1>Welcome, {{ actual_user.socialaccount_set.all.0.extra_data.name }}!</h1>
+    {% else %}
+      <h1>Welcome, you are viewing {{ friend_user.socialaccount_set.all.0.extra_data.name }}'s profile!</h1>
+    {% endif %}
   {% endif %}
 </div>
 
@@ -36,7 +46,7 @@
 <div class="row">
   <div class="col-md">
     <div class="card card-body text-center">
-      <h2>My Courses</h2>
+      <h2 class="mb-2">My Courses</h2>
       <table class="table table-sm text-center">
         <tr>
           <th>Course</th>
@@ -45,16 +55,19 @@
           <th>Time Held</th>
           <th>Units</th>
         </tr>
-        {% for course in courses %}
+        {% for course in account.get_courses %}
         <tr>
-          <td><a href="{% url 'course' course.id %}">{{course.subject}} {{course.catalog_number}}</a></td>          <td>{{course.prof_name}}</td>
+          <td><a href="{% url 'course' course.id %}">{{course.subject}} {{course.catalog_number}}</a></td>
+          <td>{{course.prof_name}}</td>
           <td>{{course.days}}</td>
-          <td>{{course.start_time}} - {{course.end_time}}</td>
+          <td>{{course.start_time | convert_time }} - {{course.end_time | convert_time }}</td>
           <td>{{course.units}}</td>
         </tr>
         {% endfor %}
       </table>
     </div>
   </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

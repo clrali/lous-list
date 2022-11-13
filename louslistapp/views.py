@@ -43,6 +43,18 @@ def dept_dropdown(request):
         # This will make sure that all sections of a course are grouped together
         all_courses = {}
         for course in courses:
+            meetDays, start_time, end_time, location = '', '', '', ''
+            if len(course['meetings']) == 0:
+                days = 'tbd'
+                start_time = 'tbd'
+                end_time = 'tbd'
+                location = 'tbd'
+            else:
+                days = course['meetings'][0]['days']
+                start_time = course['meetings'][0]['start_time']
+                end_time = course['meetings'][0]['end_time']
+                location = course['meetings'][0]['facility_description']
+
             obj, course_data = Course.objects.get_or_create(
                 prof_name=course['instructor']['name'],
                 prof_email=course['instructor']['email'],
@@ -59,10 +71,10 @@ def dept_dropdown(request):
                 wait_cap=course['wait_cap'],
                 enrollment_total=course['enrollment_total'],
                 enrollment_available=course['enrollment_available'],
-                days=course['meetings'][0]['days'],
-                start_time=course['meetings'][0]['start_time'],
-                end_time=course['meetings'][0]['end_time'],
-                location=course['meetings'][0]['facility_description']
+                days=days,
+                start_time=start_time,
+                end_time=end_time,
+                location=location
             )
         if course_num == "" and professor_name == "":
             all_courses = Course.objects.filter(
@@ -97,30 +109,38 @@ class CourseCreate(CreateView):
 
 
 def course_detail(request, id):
+    account = Account.objects.get(user=request.user.id)
     course = Course.objects.get(id=id)
+
     form2 = CourseSelected(request.POST)
 
     if request.method == 'POST':
         if form2.is_valid():
-            if course.selected == False:
-                course.selected = True
-                course.user = request.user
+            if course not in account.get_courses():
+                # add it to the course list
+                account.courses.add(course)
             else:
-                course.selected = False
-            course.save()
+                # remove it from the course list
+                account.courses.remove(course)
+            account.save()
 
-    return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
+    return render(request, 'louslistapp/course_detail.html', {'course': course,
+                                                              'form2': form2,
+                                                              'account': account})
 
 
 def create_schedule(request):
     # start_time and end_time are strings but sorting still works (might be better to switch these DateTimeFields)
-    courses = list(Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time'))
+    courses = list(Account.objects.get(user=request.user.id).courses.order_by('start_time', 'end_time'))
+    # courses = list(Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time'))
     print(courses)
 
     days_map = {'Mo': 'Monday', 'Tu': 'Tuesday',
                 'We': 'Wednesday', 'Th': 'Thursday', 'Fr': 'Friday', 'Sa': 'Saturday', 'Su': 'Sunday'}
+
     courses_per_day = {'Other': [], 'Monday': [], 'Tuesday': [
     ], 'Wednesday': [], 'Thursday': [], 'Friday': [], 'Saturday': [], 'Sunday': []}
+
     time_conflicts_per_day = {'Other': [], 'Monday': [], 'Tuesday': [
     ], 'Wednesday': [], 'Thursday': [], 'Friday': [], 'Saturday': [], 'Sunday': []}
 
@@ -197,21 +217,45 @@ def check_validity(courses):
 
     return time_conflicts
 
+
 @login_required(login_url='login/')
-def userPage(request):
-    courses = Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time')
-    total_courses = courses.count()
-    total_credits = 0
-    for c in courses:
-        total_credits += int(c.units)
-    print('courses', courses)
-    context = {'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
-    return render(request, 'louslistapp/profile.html', context)
+def userPage(request, id):
+    # user = User.objects.get(pk=id)
+    actual_account = Account.objects.get(user=request.user.id)
+    actual_user = actual_account.user
+
+    try:
+        friend_account = Account.objects.get(user=id)
+    except Account.DoesNotExist:
+        context = {'error_message': "Sorry, this profile does not exist."}
+        return render(request, 'louslistapp/profile.html', context)
+    else:
+        friend_user = friend_account.user
+        if actual_user.id != friend_user.id and friend_user not in actual_account.get_friends():
+            context = {'error_message': "Sorry, you are not authorized to view the requested profile."}
+            return render(request, 'louslistapp/profile.html', context)
+        else:
+            # courses = Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time')
+            total_courses = friend_account.get_course_count()
+            total_credits = 0
+            for c in friend_account.get_courses():
+                total_credits += int(c.units[0])
+        # print("Actual User:", request.user, request.user.id)
+        # print("Friend User:", user, user.id)
+            context = {'account': friend_account,
+                       'total_courses': total_courses,
+                       'total_credits': total_credits,
+                       'actual_user': actual_user,
+                       'friend_user': friend_user}
+            return render(request, 'louslistapp/profile.html', context)
+
+
 
 def myFriends(request):
     account = Account.objects.get(user=request.user)
     context = {'account': account}
     return render(request, 'louslistapp/my_friends.html', context)
+
 
 def invitesReceived(request):
     account = Account.objects.get(user=request.user)
@@ -223,6 +267,7 @@ def invitesReceived(request):
         is_empty = True
     context = {'qs': results, 'is_empty': is_empty}
     return render(request, 'louslistapp/invitations.html', context)
+
 
 def accept_invitation(request):
     if request.method == 'POST':
@@ -236,6 +281,7 @@ def accept_invitation(request):
             rel.save()
     return redirect('/my-invites')
 
+
 def reject_invitation(request):
     if request.method == 'POST':
         pk = request.POST.get('profile_pk')
@@ -245,11 +291,13 @@ def reject_invitation(request):
         rel.delete()
     return redirect('/my-invites')
 
+
 def viewInvitedProfiles(request):
     user = request.user
     qs = Account.objects.get_all_profiles_to_invite(user)
     context = {'qs': qs}
     return render(request, 'louslistapp/profilesToInvite.html', context)
+
 
 class AccountListView(ListView):
     model = Account
@@ -288,6 +336,7 @@ class AccountListView(ListView):
             context['is_empty'] = True
         return context
 
+
 # the current user is sending a friend request to someone else
 def send_invitation(request):
     if request.method=='POST':
@@ -303,6 +352,7 @@ def send_invitation(request):
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('/profile')
 
+
 def remove_from_friends(request):
     if request.method=='POST':
         pk = request.POST.get('profile_pk')
@@ -317,38 +367,3 @@ def remove_from_friends(request):
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('/profile')
-
-# def schedule_comment_create_and_list_view(request):
-#     owner = Account.objects.get(user=request.user)
-#     qs = Schedule.objects.filter(owner=owner)
-#     print(qs)
-
-#     context ={
-#         'qs': qs,
-#     }
-
-#     return render(request, 'louslistapp/testingschedule.html', context)
-
-# def add_remove_courses(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         schedule_id = request.POST.get('schedule_id')
-#         print(schedule_id)
-#         schedele_object = Schedule.objects.get(id=schedule_id)
-#         course = Course.objects.get(user=user)
-
-#         if course in schedele_object.courses.all():
-#             schedele_object.courses.remove(course)
-#         else:
-#             schedele_object.courses.add(course)
-        
-#         course, created = Course.objects.get_or_create(user=user, schedule_id=schedule_id)
-
-#         if not created:
-#             if course.selected == True:
-#                 course.selected = False
-#             else:
-#                 course.selected = True
-
-#             schedele_object.save()
-#             course.save()
