@@ -97,30 +97,39 @@ class CourseCreate(CreateView):
 
 
 def course_detail(request, id):
+    account = Account.objects.get(user=request.user.id)
     course = Course.objects.get(id=id)
+
     form2 = CourseSelected(request.POST)
 
     if request.method == 'POST':
         if form2.is_valid():
-            if course.selected == False:
-                course.selected = True
-                course.user = request.user
+            if course not in account.get_courses():
+                # add it to the course list
+                account.courses.add(course)
             else:
-                course.selected = False
-            course.save()
+                # remove it from the course list
+                account.courses.remove(course)
 
-    return render(request, 'louslistapp/course_detail.html', {'course': course, 'form2': form2})
+            account.save()
+
+    return render(request, 'louslistapp/course_detail.html', {'course': course,
+                                                              'form2': form2,
+                                                              'account': account})
 
 
 def create_schedule(request):
     # start_time and end_time are strings but sorting still works (might be better to switch these DateTimeFields)
-    courses = list(Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time'))
+    courses = list(Account.objects.get(user=request.user.id).courses.order_by('start_time', 'end_time'))
+    # courses = list(Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time'))
     print(courses)
 
     days_map = {'Mo': 'Monday', 'Tu': 'Tuesday',
                 'We': 'Wednesday', 'Th': 'Thursday', 'Fr': 'Friday', 'Sa': 'Saturday', 'Su': 'Sunday'}
+
     courses_per_day = {'Other': [], 'Monday': [], 'Tuesday': [
     ], 'Wednesday': [], 'Thursday': [], 'Friday': [], 'Saturday': [], 'Sunday': []}
+
     time_conflicts_per_day = {'Other': [], 'Monday': [], 'Tuesday': [
     ], 'Wednesday': [], 'Thursday': [], 'Friday': [], 'Saturday': [], 'Sunday': []}
 
@@ -197,22 +206,44 @@ def check_validity(courses):
 
     return time_conflicts
 
+
 @login_required(login_url='login/')
-def userPage(request):
-    account = Account.objects.get(user=request.user)
-    courses = Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time')
-    total_courses = courses.count()
-    total_credits = 0
-    for c in courses:
-        total_credits += int(c.units)
-    print('courses', courses)
-    context = {'account': account, 'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
-    return render(request, 'louslistapp/profile.html', context)
+def userPage(request, id):
+    # user = User.objects.get(pk=id)
+    actual_account = Account.objects.get(user=request.user.id)
+    actual_user = actual_account.user
+
+    try:
+        friend_account = Account.objects.get(user=id)
+    except Account.DoesNotExist:
+        context = {'error_message': "Sorry, this profile does not exist."}
+        return render(request, 'louslistapp/profile.html', context)
+    else:
+        friend_user = friend_account.user
+        if actual_user.id != friend_user.id and friend_user not in actual_account.get_friends():
+            context = {'error_message': "Sorry, you are not authorized to view the requested profile."}
+            return render(request, 'louslistapp/profile.html', context)
+        else:
+            # courses = Course.objects.filter(selected=True, user=request.user.id).order_by('start_time', 'end_time')
+            total_courses = friend_account.get_course_count()
+            total_credits = 0
+            for c in friend_account.get_courses():
+                total_credits += int(c.units)
+        # print("Actual User:", request.user, request.user.id)
+        # print("Friend User:", user, user.id)
+            context = {'account': friend_account,
+                       'total_courses': total_courses,
+                       'total_credits': total_credits,
+                       'actual_user': actual_user,
+                       'friend_user': friend_user}
+            return render(request, 'louslistapp/profile.html', context)
+
 
 def myFriends(request):
     account = Account.objects.get(user=request.user)
     context = {'account': account}
     return render(request, 'louslistapp/my_friends.html', context)
+
 
 def invitesReceived(request):
     account = Account.objects.get(user=request.user)
@@ -224,6 +255,7 @@ def invitesReceived(request):
         is_empty = True
     context = {'qs': results, 'is_empty': is_empty}
     return render(request, 'louslistapp/invitations.html', context)
+
 
 def accept_invitation(request):
     if request.method == 'POST':
@@ -237,6 +269,7 @@ def accept_invitation(request):
             rel.save()
     return redirect('/my-invites')
 
+
 def reject_invitation(request):
     if request.method == 'POST':
         pk = request.POST.get('profile_pk')
@@ -246,11 +279,13 @@ def reject_invitation(request):
         rel.delete()
     return redirect('/my-invites')
 
+
 def viewInvitedProfiles(request):
     user = request.user
     qs = Account.objects.get_all_profiles_to_invite(user)
     context = {'qs': qs}
     return render(request, 'louslistapp/profilesToInvite.html', context)
+
 
 class AccountListView(ListView):
     model = Account
@@ -289,6 +324,7 @@ class AccountListView(ListView):
             context['is_empty'] = True
         return context
 
+
 # the current user is sending a friend request to someone else
 def send_invitation(request):
     if request.method=='POST':
@@ -303,6 +339,7 @@ def send_invitation(request):
         # redirect to the same page you're currently on
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('/profile')
+
 
 def remove_from_friends(request):
     if request.method=='POST':

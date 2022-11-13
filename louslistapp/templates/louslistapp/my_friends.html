@@ -1,16 +1,35 @@
 {% extends 'louslistapp/navbar.html' %} {% block content %}
 <div>
-  <h3>Friend Count</h3>
-  Friends number: {{account.get_friends_count}}
-  <h3>Your Friends</h3>
+  <div class="m-2 text-center">
+      <h1>My Friends</h1>
+      <h5>Friend Count: {{ account.get_friends_count }}</h5>
+  </div>
+
   {% if account.get_friends %} 
   {% for friend in account.get_friends %}
-  <p>{{friend}}</p>
-  <br />
+  <div class="container">
+    <div class="row row-cols-4">
+      <div class="col justify-content-center">
+        <div class="card text-white" style="background-color: black;">
+          <img
+            class="card-img-top"
+            src="{{ friend.socialaccount_set.all.0.get_avatar_url }}"
+          />
+          <div class="card-body text-center">
+            <h3 class="card-title">{{friend}}</h3>
+              <a href="{% url 'profile' friend.id %}" class="btn bg-info btn-sm mb-3 mt-2 w-big">
+                View Profile
+              </a>
+          </div>
+        </div>
+    </div>
+</div>
+
+    <br />
   {% endfor %} 
-  {% else %} 
-  Friends number: {{account.get_friends_count}} 
-  There are no friends! {% endif %}
+  {% else %}
+    <h3>There are no friends!</h3>
+    {% endif %}
 </div>
 
 {% endblock %}
