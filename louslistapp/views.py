@@ -239,6 +239,17 @@ def userPage(request, id):
             return render(request, 'louslistapp/profile.html', context)
 
 
+def userPage(request):
+    courses = Course.objects.filter(selected=True, user=request.user).order_by('start_time', 'end_time')
+    total_courses = courses.count()
+    total_credits = 0
+    for c in courses:
+        total_credits += int(c.units)
+    print('courses', courses)
+    context = {'courses': courses, 'total_courses': total_courses, 'total_credits': total_credits}
+    return render(request, 'louslistapp/profile.html', context)
+
+
 def myFriends(request):
     account = Account.objects.get(user=request.user)
     context = {'account': account}
