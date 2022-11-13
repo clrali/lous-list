@@ -18,9 +18,6 @@
     />
     <div class="card-body">
       <h3>{{ item.user }}</h3>
-      <button type="submit" class="btn btn-info btn-sm mb-5 w-big">
-        See Profile
-      </button>
 
       {% if item.user not in rel_receiver and item.user not in rel_sender %}
       <form action="{% url 'send-invite' %}" method="POST">

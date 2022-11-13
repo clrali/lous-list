@@ -1,5 +1,6 @@
 {% extends 'louslistapp/navbar.html' %}
 {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+{% load time_converter %}
 {% bootstrap_messages %} {% load socialaccount %}
 {% block content %}
 
@@ -20,7 +21,7 @@
               <h1 class="my-3">Class Details</h1>
               <p>Waitlist: {{ course.waitlist }}/{{ course.wait_cap }}</p>
               <p>Open seats: {{ course.enrollment_available }}/{{ course.enrollment_total }}</p>
-              <p>Days taught: {{ course.days }}</p>
+              <p>Times taught: {{ course.start_time | convert_time }} - {{ course.end_time | convert_time }} on {{ course.days }}</p>
               <p>Location: {{ course.location }}</p>
               </ul>
                 <a href="#" onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')">
@@ -41,7 +42,7 @@
         <iframe name="hiddenFrame" class="hide"></iframe>
         <form method="POST" target="hiddenFrame">
             {% csrf_token %} {{ form2 }}
-            {% if course.selected == True %}
+            {% if course in account.get_courses %}
           <button
             type="submit"
             class="btn btn-danger btn-sm"
