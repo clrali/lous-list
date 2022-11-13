@@ -13,8 +13,8 @@
             <div class="row">
                 <h3 class="card-title text-center display-4">{{ course.description }}</h3>
             </div>
-            <div class="row justify-content-center d-flex-row">
-                <div class="col">
+            <div class="row justify-content-center">
+                <div class="col col-md-3">
                     <iframe name="hiddenFrame" class="hide"></iframe>
                     <form method="POST" target="hiddenFrame">
                         {% csrf_token %} {{ form2 }} {% if course in account.get_courses %}
@@ -34,8 +34,8 @@
                         {% endif %}
                     </form>
                 </div>
-                <div class="col">
-                    <button class="btn bg-black btn-sm text-white" onclick="history.back()">Go Back</button>
+                <div class="col col-md-3">
+                    <button class="btn bg-black btn-sm text-white" onclick="history.back()">Go <br> Back</button>
                 </div>
             </div>
         </div>
