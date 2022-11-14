@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 import requests
-from .models import Course, Account, Relationship
+from .models import Course, Account, Relationship, Comment
 from .forms import CourseSelected
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView, ListView
@@ -247,6 +247,15 @@ def userPage(request, id):
                        'total_credits': total_credits,
                        'actual_user': actual_user,
                        'friend_user': friend_user}
+
+
+
+            #comment = Comment.objects.get()
+
+            # if request.method == 'POST':
+            #     actual_account.comments.add(comment)
+            #     actual_account.save()
+
             return render(request, 'louslistapp/profile.html', context)
 
 

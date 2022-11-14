@@ -1,5 +1,5 @@
 {% extends "louslistapp/navbar.html" %} {% load socialaccount %}
-{% load time_converter %}
+{% load time_converter %} {% load bootstrap5 %} {% bootstrap_css %}
 {% block content %}
 
 <div class="row my-3 p-3 text-center">
@@ -67,7 +67,41 @@
       </table>
     </div>
   </div>
-  </div>
   {% endif %}
 </div>
+
+<div class="row">
+  <div class="col-md">
+    <div class="card card-body text-center">
+      <h2 class="col-mb-2"> Comments </h2>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <form method="POST" class="form-group row">
+              {% csrf_token %}
+              Add a comment:
+                <input
+                  placeholder="Comment"
+                  type="text"
+                  name="n"
+                  class="form-control"
+                  style="width: 50rem"
+                />
+                {% buttons %}
+                  <button type="submit" class="btn btn-dark text"> Comment </button>
+                {% endbuttons %}
+            </form>
+          </li>
+
+
+        {% for comments in account.get_comments %}
+        <li>
+          <div>{{course.author}}: {{course.message}}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 {% endblock %}
+
+
