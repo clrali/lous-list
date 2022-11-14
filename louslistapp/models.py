@@ -100,6 +100,12 @@ class Account(models.Model):
     def get_course_count(self):
         return self.courses.all().count()
 
+    def get_comments(self):
+        return self.comments.all()
+
+    def get_comments_count(self):
+        return self.comments.all().count()
+
     def __str__(self):
         return str(self.user)
 

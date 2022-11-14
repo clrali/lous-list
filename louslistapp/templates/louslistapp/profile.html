@@ -75,28 +75,33 @@
     <div class="card card-body text-center">
       <h2 class="col-mb-2"> Comments </h2>
         <ul class="list-group">
+          {% if actual_user.id != friend_user.id %}
           <li class="list-group-item">
-            <form method="POST" class="form-group row">
+            <form method="POST" class="form-group row" action="{% url 'comment' friend_user.id %}">
               {% csrf_token %}
-              Add a comment:
+              <div class="row justify-content-center d-flex">
+                <div class="col-xs-6 col-sm-6 col-md-6">
                 <input
                   placeholder="Comment"
                   type="text"
-                  name="n"
+                  name="comment"
+                  id="comment"
                   class="form-control"
                   style="width: 50rem"
-                />
+                /></div>
+                <div class="col-xs-4 col-sm-4 col-md-4 justify-content-left">
                 {% buttons %}
                   <button type="submit" class="btn btn-dark text"> Comment </button>
                 {% endbuttons %}
+                  </div>
+                </div>
             </form>
           </li>
+          {% endif %}
 
 
-        {% for comments in account.get_comments %}
-        <li>
-          <div>{{course.author}}: {{course.message}}</div>
-        </li>
+        {% for comment in account.get_comments %}
+          <div>{{comment.author}}: {{comment.message}}</div>
         {% endfor %}
       </ul>
     </div>
