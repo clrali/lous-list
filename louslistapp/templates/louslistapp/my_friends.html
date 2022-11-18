@@ -4,7 +4,7 @@
   <div class="m-4 text-center">
       <h1>My Friends</h1>
       <h5>Friend Count: {{ account.get_friends_count }}</h5>
-    <button type="submit" class="btn btn-dark text vertical-center" onclick="/all-profiles/">Click Here to Add Friends</button>
+    <button type="submit" class="btn btn-dark text vertical-center" href="/all-profiles">Click Here to Add Friends</button>
   </div>
 
   {% if account.get_friends %} 
