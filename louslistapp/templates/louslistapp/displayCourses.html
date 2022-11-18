@@ -1,6 +1,7 @@
 {% extends 'louslistapp/navbar.html' %} {% load bootstrap5 %} {% bootstrap_css %} 
 {% bootstrap_javascript %} {% bootstrap_messages %} {% load static %} 
 {% load socialaccount %} {% block content %}
+<link rel="stylesheet" href="{% static 'louslistapp/general_style.css' %}">
 
 <title>Department Search</title>
 <div class="container">
@@ -55,8 +56,8 @@
     </div>
     <div class="row">
       {% if all_courses %} {% for course in all_courses %}
-      <div class="col-md-4 col-sm-6 col-lg-3 mt-5">
-        <div class="card">
+      <div class="col-md-4 col-sm-6 col-lg-3 mt-2 mb-2">
+        <div class="card bg-medium-blue">
           <div class="card-body text-center">
             <p class="card-title">
               {{ course.subject }} {{ course.catalog_number }}
@@ -68,7 +69,7 @@
               ><input
                 type="submit"
                 value="Learn More"
-                class="btn btn-info btn-sm"
+                class="btn bg-black btn-sm text-white"
                 type="button"
             /></a>
             <br>
