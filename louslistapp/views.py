@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 import requests
-from .models import Course, Account, Relationship
+from .models import Course, Account, Relationship, Comment
 from .forms import CourseSelected
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView, ListView
@@ -9,6 +9,9 @@ import re
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+
 
 def home(request):
     return render(request, 'louslistapp/home.html')
@@ -224,6 +227,8 @@ def userPage(request, id):
     actual_account = Account.objects.get(user=request.user.id)
     actual_user = actual_account.user
 
+    print(actual_account.get_comments)
+
     try:
         friend_account = Account.objects.get(user=id)
     except Account.DoesNotExist:
@@ -247,8 +252,29 @@ def userPage(request, id):
                        'total_credits': total_credits,
                        'actual_user': actual_user,
                        'friend_user': friend_user}
+
+
+
+            #comment = Comment.objects.get()
+
+            # if request.method == 'POST':
+            #     actual_account.comments.add(comment)
+            #     actual_account.save()
+
             return render(request, 'louslistapp/profile.html', context)
 
+
+def publish_comment(request, id):
+    # we have to create a comment here and then add it to the user's account (user's id)
+    comment_text = request.POST['comment']
+    account = Account.objects.get(user=id)
+
+    comment = Comment.objects.create(message=comment_text, author=request.user.username)
+    account.comments.add(comment)
+
+    # redirect the user to the profile they are currently viewing
+    return HttpResponseRedirect(f"/profile/{id}/")
+    # return HttpResponseRedirect(reverse('profile'), args=(id,))
 
 
 def myFriends(request):

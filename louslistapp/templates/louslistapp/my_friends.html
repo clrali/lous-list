@@ -1,8 +1,10 @@
-{% extends 'louslistapp/navbar.html' %} {% block content %}
+{% extends 'louslistapp/navbar.html' %} {% block content %} {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+{% bootstrap_messages %} {% load static %} {% load socialaccount %}
 <div>
-  <div class="m-2 text-center">
+  <div class="m-4 text-center">
       <h1>My Friends</h1>
       <h5>Friend Count: {{ account.get_friends_count }}</h5>
+    <button type="submit" class="btn btn-dark text vertical-center" onclick="/all-profiles/">Click Here to Add Friends</button>
   </div>
 
   {% if account.get_friends %} 
@@ -28,8 +30,8 @@
     <br />
   {% endfor %} 
   {% else %}
-    <h3>There are no friends!</h3>
+    <h3 class="text-center m-5">You have not added any friends.</h3>
     {% endif %}
 </div>
-
+</div>
 {% endblock %}

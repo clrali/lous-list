@@ -70,11 +70,21 @@ class AccountManager(models.Manager):
         accounts = Account.objects.all().exclude(user=me)
         return accounts
 
+
+class Comment(models.Model):
+    message = models.CharField(max_length=1500, null=True)
+    author = models.CharField(max_length=1500, null=True) # models.OneToOneField(Account, null=True, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.author}: {self.message}"
+
+
 class Account(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     courses = models.ManyToManyField(Course, related_name='courses', blank=True)
+    comments = models.ManyToManyField(Comment, related_name='comments', blank=True)
 
     objects = AccountManager()
 
@@ -89,6 +99,12 @@ class Account(models.Model):
     
     def get_course_count(self):
         return self.courses.all().count()
+
+    def get_comments(self):
+        return self.comments.all()
+
+    def get_comments_count(self):
+        return self.comments.all().count()
 
     def __str__(self):
         return str(self.user)
