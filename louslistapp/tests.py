@@ -54,7 +54,6 @@ class InstructorModelTest(TestCase):
             prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
         expected_instructor = Instructor.objects.create(
             prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
-
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
 """
@@ -75,7 +74,7 @@ class URLTest(TestCase):
 class CourseDisplayTest(TestCase):
     def test_to_access_my_courses_when_logged_in(self):
         self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() 
+        self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
         response = self.client.get(('/selected-courses'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 404)
@@ -100,9 +99,7 @@ class ScheduleBuilderTest(TransactionTestCase):
         self.user = User.objects.get(pk=1)
         self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
-
         # course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
-
         schedule = {'Other': [],
                     'Monday': [],
                     'Tuesday': [],
@@ -111,24 +108,19 @@ class ScheduleBuilderTest(TransactionTestCase):
                     'Friday': [],
                     'Saturday': [],
                     'Sunday': []}
-
         response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id}, follow=True)
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.id, 1)
-
         self.assertTemplateUsed(response, "louslistapp/schedule.html")
-
         self.assertEqual(response.context['message'], 'This is a valid schedule')
         self.assertEqual(response.context['schedule'], schedule)
         self.assertEqual(response.context['duplicate_courses'], None)
         self.assertEqual(response.context['course_time_conflicts'], None)
-        '''
-
-class CourseSchedulingTest(TransactionTestCase):  
+'''
+class CourseSchedulingTest(TransactionTestCase):
     def test_to_access_schedule_when_logged_in(self):
         self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() 
+        self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
         response = self.client.post(reverse('create-schedule'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 200)
@@ -139,3 +131,27 @@ class CourseSchedulingTest(TransactionTestCase):
         response = self.client.post(('schedule'), {'user_id': self.user.id})
         # should be 404 because page cannot be accessed when not logged in
         self.assertEqual(response.status_code, 404)
+
+class FriendsTest(TransactionTestCase):
+    def test_to_access_my_friends_when_not_logged_in(self):
+        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client()
+        #response = self.client.post(('my-friends'), {'user_id': self.user.id})
+        # should be 404 because page cannot be accessed when not logged in
+        #self.assertEqual(response.status_code, 404)
+        response = self.client.get('/profile/7/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_to_access_profile_when_not_logged_in(self):
+        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client()
+        response = self.client.post(('my-friends'), {'user_id': self.user.id})
+        # should be 404 because page cannot be accessed when not logged in
+        self.assertEqual(response.status_code, 404)
+
+    def test_to_access_friends_when_logged_in(self):
+        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
+        self.client = Client()
+        self.client.login(username=self.user.username, password='pass@123')
+        response = self.client.post(reverse('my-friends'), {'user_id': self.user.id})
+        self.assertEqual(response.status_code, 200)
