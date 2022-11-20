@@ -133,14 +133,14 @@ class CourseSchedulingTest(TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
 class FriendsTest(TransactionTestCase):
-    def test_to_access_my_friends_when_not_logged_in(self):
-        self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client()
-        #response = self.client.post(('my-friends'), {'user_id': self.user.id})
-        # should be 404 because page cannot be accessed when not logged in
-        #self.assertEqual(response.status_code, 404)
-        response = self.client.get('/profile/7/')
-        self.assertEqual(response.status_code, 302)
+    # def test_to_access_my_friends_when_not_logged_in(self):
+    #     self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
+    #     self.client = Client()
+    #     #response = self.client.post(('my-friends'), {'user_id': self.user.id})
+    #     # should be 404 because page cannot be accessed when not logged in
+    #     #self.assertEqual(response.status_code, 404)
+    #     response = self.client.get('/profile/7/')
+    #     self.assertEqual(response.status_code, 302)
 
     def test_to_access_profile_when_not_logged_in(self):
         self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
