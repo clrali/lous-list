@@ -1,69 +1,81 @@
 {% extends 'louslistapp/navbar.html' %} {% load bootstrap5 %} {% bootstrap_css%}
-{% bootstrap_javascript %} {% load time_converter %} {% bootstrap_messages %}
-{% load static %}{% load socialaccount %} {% block content %}
+{% bootstrap_javascript %} {% load time_converter %} {% bootstrap_messages %} 
+{%load static %}{% load socialaccount %} {% block content %}
 
-<link rel="stylesheet" href="{% static 'louslistapp/general_style.css' %}">
+<link rel="stylesheet" href="{% static 'louslistapp/courseDetail_style.css' %}" />
 
 <html>
-<body>
-<div class="container">
-    <br/><br/>
-    <div class="row align-items-center">
+  <body>
+    <div class="container">
+      <br /><br />
+      <div class="row align-items-center">
         <div class="col-md-5">
-            <div class="row">
-                <h3 class="card-title text-center display-4">{{ course.description }}</h3>
+          <div class="row">
+            <h3 class="card-title text-center display-4">
+              {{ course.description }}
+            </h3>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col col-md-3">
+              <iframe name="hiddenFrame" class="hide"></iframe>
+              <form method="POST" target="hiddenFrame">
+                {% csrf_token %} {{ form2 }} 
+                {% if course in account.get_courses %}
+                <button
+                  type="submit"
+                  class="btn btn-danger btn-sm buttonStyle"
+                  onClick="return confirm('Remove {{course.description}} from schedule?'); history.back(0);"
+                >
+                  Remove from Schedule
+                </button>
+                {% else %}
+                <button
+                  type="submit"
+                  class="btn btn-success btn-sm buttonStyle"
+                  onClick="return confirm('Add {{course.description}} to schedule'); history.back(0);"
+                >
+                  Add to Schedule
+                </button>
+                {% endif %}
+              </form>
             </div>
-            <div class="row justify-content-center">
-                <div class="col col-md-3">
-                    <iframe name="hiddenFrame" class="hide"></iframe>
-                    <form method="POST" target="hiddenFrame">
-                        {% csrf_token %} {{ form2 }} {% if course in account.get_courses %}
-                        <button
-                                type="submit"
-                                class="btn btn-danger btn-sm"
-                                onClick="return confirm('Remove {{course.description}} from schedule?'); history.back(0);">
-                            Remove from Schedule
-                        </button>
-                        {% else %}
-                        <button
-                                type="submit"
-                                class="btn btn-success btn-sm"
-                                onClick="return confirm('Add {{course.description}} to schedule'); history.back(0);">
-                            Add to Schedule
-                        </button>
-                        {% endif %}
-                    </form>
-                </div>
-                <div class="col col-md-3">
-                    <button class="btn bg-black btn-sm text-white" onclick="history.back()">Go <br> Back</button>
-                </div>
+            <div class="col col-md-3">
+              <button
+                class="btn bg-black btn-sm text-white buttonStyle"
+                onclick="history.back()"
+              >
+                Return
+              </button>
             </div>
+          </div>
         </div>
         <div class="col-md-7 shadow-lg p-3 mb-5 bg-light-blue rounded">
-            <h1 class="my-3">Class Description</h1>
-            <p class="lead">
-                {{ course.description }} class taught by {{ course.prof_name }}.
-            </p>
-            <h1 class="my-3">Class Details</h1>
-            <p>Waitlist: {{ course.waitlist }}/{{ course.wait_cap }}</p>
-            <p>
-                Open seats: {{ course.enrollment_available }}/{{ course.enrollment_total }}
-            </p>
-            <p>
-                Times taught: {{ course.start_time | convert_time }} - {{ course.end_time | convert_time }} on {{ course.days }}
-            </p>
-            <p>Location: {{ course.location }}</p>
+          <h1 class="my-3">Class Description
             <a
-                    href="https://thecourseforum.com/course/{{course.subject}}/{{course.catalog_number}}/"
-                    onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')"
-            >
-                <img alt="CourseForum"
-                     src="https://thecourseforum.com/static/base/img/new_logo.png"
-                     width=40" height="40">
-            </a>
+            href="https://thecourseforum.com/course/{{course.subject}}/{{course.catalog_number}}/"
+            onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')"
+            target="_blank"
+          >
+            <img alt="CourseForum"
+            src="https://thecourseforum.com/static/base/img/new_logo.png"
+            width=40" height="40">
+          </a>
+          </h1>
+          <p class="lead">
+            {{ course.description }} class taught by {{ course.prof_name }}.
+          </p>
+          <h1 class="my-3">Class Details</h1>
+          <p>Waitlist: {{ course.waitlist }}/{{ course.wait_cap }}</p>
+          <p>
+            Open seats: {{ course.enrollment_available }}/{{course.enrollment_total }}
+          </p>
+          <p>
+            Times taught: {{ course.start_time | convert_time }} - {{course.end_time | convert_time }} on {{ course.days }}
+          </p>
+          <p>Location: {{ course.location }}</p>
         </div>
-    </div>
-    <style>
+      </div>
+      <style>
         .hide {
           position: absolute;
           top: -1px;
@@ -71,17 +83,15 @@
           width: 1px;
           height: 1px;
         }
-    </style>
+      </style>
+    </div>
+    {% endblock %}
 
-</div>
-{% endblock %}
-
-<script type = "text/javascript">
+    <script type="text/javascript">
       function myFunction2(p1, p2) {
         window.location =
           "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
       }
-
-</script>
-</body>
+    </script>
+  </body>
 </html>

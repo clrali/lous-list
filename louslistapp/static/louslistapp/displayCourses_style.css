@@ -5,17 +5,16 @@
 }
 
 .bg-light-blue {
-  background-color: #e6f5ff;
-}
-
-.text-light-blue {
-  color: #e6f5ff;
+background-color: #e6f5ff;
 }
 
 .bg-medium-blue {
-  background-color: #ccebff;
+background-color: #ccebff;
 }
 
-.text-medium-blue {
-  color: #ccebff;
+.cardFormat {
+    height: 290px;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
 }

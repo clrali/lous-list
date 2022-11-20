@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'louslistapp/general_style.css' %}">
+<link rel="stylesheet" href="{% static 'louslistapp/schedule_style.css' %}">
 
 <div class="m-4 text-center">
     <h1>Schedule</h1>
@@ -37,9 +37,15 @@
 
     {% if schedule %}
     {% for key, value in schedule.items %}
+    <div class="dropdown">
     <div class="card m-2 bg-dark text-white">
         <div class="card-body">
-            <h3 class="card-title">{{ key }}</h3>
+            <div class="d-flex flex-start">
+                <!-- <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button> -->
+                <h3 class="card-title">{{ key }}</h3>
+            </div>
             {% for course in value %}
             <div class="card text-dark m-3 bg-light-blue">
                 <div class="card-header h6 bg-medium-blue">
@@ -81,6 +87,7 @@
             {% endfor %}
         </div>
     </div>
+        </div>
     {% endfor %}
     {% endif %}
 </div>

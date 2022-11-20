@@ -73,7 +73,8 @@ class AccountManager(models.Manager):
 
 class Comment(models.Model):
     message = models.CharField(max_length=1500, null=True)
-    author = models.CharField(max_length=1500, null=True) # models.OneToOneField(Account, null=True, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    time = models.DateTimeField(null=True)
 
     def __str__(self) -> str:
         return f"{self.author}: {self.message}"

@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 
 
 def home(request):
@@ -102,13 +103,6 @@ def CourseList(request):
     title = "Courses"
     context = Course.objects.filter(selected=True, user=request.user)
     return render(request, 'louslistapp/course_list.html', {"all_course": context})
-
-
-class CourseCreate(CreateView):
-    model = Course
-    fields = ['user', 'prof_name', 'semester_code',
-              'subject', 'catalog_number', ]
-    success_url = reverse_lazy('courses')
 
 
 def course_detail(request, id):
@@ -221,7 +215,7 @@ def check_validity(courses):
     return time_conflicts
 
 
-@login_required(login_url='login/')
+# @login_required(login_url='login/')
 def userPage(request, id):
     # user = User.objects.get(pk=id)
     actual_account = Account.objects.get(user=request.user.id)
@@ -269,7 +263,7 @@ def publish_comment(request, id):
     comment_text = request.POST['comment']
     account = Account.objects.get(user=id)
 
-    comment = Comment.objects.create(message=comment_text, author=request.user.username)
+    comment = Comment.objects.create(message=comment_text, author=request.user, time=timezone.now())
     account.comments.add(comment)
 
     # redirect the user to the profile they are currently viewing

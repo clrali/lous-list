@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
-from .views import CourseList, CourseCreate, AccountListView
+from .views import CourseList, AccountListView
 from . import views
 
 urlpatterns = [
@@ -12,7 +12,6 @@ urlpatterns = [
     path('department/', views.dept_dropdown, name='department'),
     path('courses/<int:id>/', views.course_detail, name="course"),
     path('schedule/', views.create_schedule, name='create-schedule'),
-    path('course-create/', CourseCreate.as_view(), name='course-create'),
     path('profile/<int:id>/', views.userPage, name='profile'),
 
     path('my-invites/', views.invitesReceived, name='my-invites'),
