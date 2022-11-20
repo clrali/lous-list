@@ -54,7 +54,6 @@ class InstructorModelTest(TestCase):
             prof_name=courses['instructor']['name'], prof_email=courses['instructor']['email'])
         expected_instructor = Instructor.objects.create(
             prof_name="Cong Shen", prof_email="cs7dt@virginia.edu")
-
         self.assertNotEqual(test_instructor.prof_name,
                             expected_instructor.prof_name, "The instructor is the same")
 """
@@ -75,7 +74,7 @@ class URLTest(TestCase):
 class CourseDisplayTest(TestCase):
     def test_to_access_my_courses_when_logged_in(self):
         self.user = User.objects.create_user(username='admin', password='pass@123', email='admin@admin.com')
-        self.client = Client() 
+        self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
         response = self.client.get(('/selected-courses'), {'user_id': self.user.id})
         self.assertEqual(response.status_code, 404)
@@ -100,9 +99,7 @@ class ScheduleBuilderTest(TransactionTestCase):
         self.user = User.objects.get(pk=1)
         self.client = Client()
         self.client.login(username=self.user.username, password='pass@123')
-
         # course_1, course_2 = Course.objects.get(pk=1), Course.objects.get(pk=2)
-
         schedule = {'Other': [],
                     'Monday': [],
                     'Tuesday': [],
@@ -111,14 +108,10 @@ class ScheduleBuilderTest(TransactionTestCase):
                     'Friday': [],
                     'Saturday': [],
                     'Sunday': []}
-
         response = self.client.get(reverse('create-schedule'), {'user_id': self.user.id}, follow=True)
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.user.id, 1)
-
         self.assertTemplateUsed(response, "louslistapp/schedule.html")
-
         self.assertEqual(response.context['message'], 'This is a valid schedule')
         self.assertEqual(response.context['schedule'], schedule)
         self.assertEqual(response.context['duplicate_courses'], None)
