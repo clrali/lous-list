@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 
 
 def home(request):
@@ -269,7 +270,7 @@ def publish_comment(request, id):
     comment_text = request.POST['comment']
     account = Account.objects.get(user=id)
 
-    comment = Comment.objects.create(message=comment_text, author=request.user.username)
+    comment = Comment.objects.create(message=comment_text, author=request.user, time=timezone.now())
     account.comments.add(comment)
 
     # redirect the user to the profile they are currently viewing

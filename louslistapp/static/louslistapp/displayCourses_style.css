@@ -2,14 +2,13 @@
 background-color: #e6f5ff;
 }
 
-.text-light-blue {
-color: #e6f5ff;
-}
-
 .bg-medium-blue {
 background-color: #ccebff;
 }
 
-.text-medium-blue {
-color: #ccebff;
+.cardFormat {
+    height: 260px;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
 }
