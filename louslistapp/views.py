@@ -105,13 +105,6 @@ def CourseList(request):
     return render(request, 'louslistapp/course_list.html', {"all_course": context})
 
 
-class CourseCreate(CreateView):
-    model = Course
-    fields = ['user', 'prof_name', 'semester_code',
-              'subject', 'catalog_number', ]
-    success_url = reverse_lazy('courses')
-
-
 def course_detail(request, id):
     account = Account.objects.get(user=request.user.id)
     course = Course.objects.get(id=id)
@@ -222,7 +215,7 @@ def check_validity(courses):
     return time_conflicts
 
 
-@login_required(login_url='login/')
+# @login_required(login_url='login/')
 def userPage(request, id):
     # user = User.objects.get(pk=id)
     actual_account = Account.objects.get(user=request.user.id)

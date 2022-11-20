@@ -1,12 +1,14 @@
 {% extends 'louslistapp/navbar.html' %} 
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'louslistapp/home_style.css' %}">
+
 <div style="text-align: center">
   <h1 class="m-3">Lou's List App A-24</h1>
   {% if user.is_authenticated %}
   <h2>Welcome, {{ user.socialaccount_set.all.0.extra_data.name }}!</h2>
   {% else %}
-  <h2 class="m-3">Login to Start</h2>
+  <h2 class="m-3">Login to begin viewing classes and building your schedule!</h2>
   {% endif %}
 </div>
 

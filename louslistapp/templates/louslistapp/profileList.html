@@ -30,7 +30,7 @@
       {% endif %} 
       
       {% if item.user in rel_receiver and request.user not in item.friends.all %}
-      <button disabled class="mb-5 w-big">
+      <button disabled class="mb-5 w-big bg-dark text-light">
         Waiting for approval
       </button>
       {% endif %} 
