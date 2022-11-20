@@ -1,15 +1,21 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    align-items: center;
+}
+
 .bg-light-blue {
-background-color: #e6f5ff;
+  background-color: #e6f5ff;
 }
 
 .text-light-blue {
-color: #e6f5ff;
+  color: #e6f5ff;
 }
 
 .bg-medium-blue {
-background-color: #ccebff;
+  background-color: #ccebff;
 }
 
 .text-medium-blue {
-color: #ccebff;
+  color: #ccebff;
 }

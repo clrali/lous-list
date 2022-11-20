@@ -1,0 +1,29 @@
+* {
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  align-items: center;
+}
+
+.bg-light-blue {
+  background-color: #e6f5ff;
+}
+
+.text-light-blue {
+  color: #e6f5ff;
+}
+
+.bg-medium-blue {
+  background-color: #ccebff;
+}
+
+.text-medium-blue {
+  color: #ccebff;
+}
+
+.buttonStyle {
+    margin: 0 auto;
+    display: block;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100px;
+}
