@@ -1,17 +1,16 @@
-{% extends 'louslistapp/navbar.html' %} {% block content %} 
-{% load static %} {% load socialaccount %}
+{% extends 'louslistapp/navbar.html' %} {% load static %} {%load socialaccount %}
+{% block content %}  
 
 <link rel="stylesheet" href="{% static 'louslistapp/general_style.css' %}" />
 
 <div>
   <div class="m-4 text-center">
     <h1>My Friends</h1>
-    <h5>Friend Count: {{ account.get_friends_count }}</h5>
+    <h3>Friend Count: {{ account.get_friends_count }}</h3>
     <a class="btn btn-dark text vertical-center" href="{% url 'all-profiles' %}"
       >Click Here to Add Friends</a
     >
   </div>
-
   <div class="container">
     <div class="row row-cols-4">
       <div class="d-flex flex-row justify-content-center">
@@ -34,11 +33,10 @@
         {% endfor %}
       </div>
     </div>
-
     <br />
-    {% else %}
-    <h3 class="text-center m-5">You have not added any friends.</h3>
-    {% endif %}
   </div>
 </div>
+{% else %}
+<h3>You have not added any friends.</h3>
+{% endif %} 
 {% endblock %}
