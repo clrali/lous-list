@@ -6,7 +6,7 @@
   <div class="demo-content">
     <br />
     {% if user.is_authenticated %}
-    <h1>Welcome, {{ user.socialaccount_set.all.0.extra_data.name }}!</h1>
+    <h1>Welcome to the new Lou's List, {{ user.socialaccount_set.all.0.extra_data.name }}!</h1>
     {% else %}
     <h1> Welcome to the new Lou's List! </h1>
     <h1>
