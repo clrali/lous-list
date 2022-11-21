@@ -1,59 +1,67 @@
-{% extends 'louslistapp/navbar.html' %} {% load bootstrap5 %} {% bootstrap_css %} 
-{% bootstrap_javascript %} {% bootstrap_messages %} {% load static %} 
-{% load socialaccount %} {% block content %}
-<link rel="stylesheet" href="{% static 'louslistapp/displayCourses_style.css' %}">
+{%extends 'louslistapp/navbar.html'%} {%load bootstrap5%} {%bootstrap_css%}
+{%bootstrap_javascript%} {%bootstrap_messages%} {%load static%} 
+{%load socialaccount%} {% block content %}
+<link
+  rel="stylesheet"
+  href="{% static 'louslistapp/displayCourses_style.css' %}"
+/>
 
-<title>Department Search</title>
+<title>Course Search</title>
 <div class="container">
   <div class="text-center container">
-    <h1 class="text-center m-3">Course Search</h1>
-    <div class="container mt-3">
+    <h1 class="mt-3">Course Search</h1>
+    <div class="container mt-3 formStyle">
       <form action="/department/" method="GET">
-        <div class="d-flex justify-content-center mt-3">
-          <input
-            list="departments"
-            placeholder="Department (required)"
-            type="text"
-            name="q"
-            class="form-control"
-            required
-            style="width: 18rem"
-          />
-        </div>
+        <div class="d-flex flex-row justify-content-center mt-3">
+          <div class="p-2">
+            <input
+              list="departments"
+              placeholder="Department (required)"
+              type="text"
+              name="q"
+              class="form-control"
+              required
+              style="width: 18rem"
+            />
+          </div>
 
-        <datalist id="departments">
-          {% for department in departments %}
-          <option value="{{ department.subject }}">
-            {{ department.subject }}
-          </option>
-          {% endfor %}
-        </datalist>
-        <div class="d-flex justify-content-center mt-3">
-          <input
-            placeholder="Course Number"
-            type="text"
-            name="n"
-            class="form-control"
-            style="width: 18rem"
-          />
-        </div>
-        <div class="d-flex justify-content-center mt-3">
-          <input
-            placeholder="Professor Name"
-            type="text"
-            name="p"
-            class="form-control"
-            style="width: 18rem"
-          />
-        </div>
+          <datalist id="departments">
+            {% for department in departments %}
+            <option value="{{ department.subject }}">
+              {{ department.subject }}
+            </option>
+            {% endfor %}
+          </datalist>
+          <div class="p-2">
+            <input
+              placeholder="Course Number"
+              type="text"
+              name="n"
+              class="form-control"
+              style="width: 18rem"
+            />
+          </div>
+          <div class="p-2">
+            <input
+              placeholder="Professor Name"
+              type="text"
+              name="p"
+              class="form-control"
+              style="width: 18rem"
+            />
+          </div>
 
-        <div class="d-flex justify-content-center mt-3">
-          {% buttons %}
-          <button type="submit" class="btn btn-dark text">Search</button>
-          {% endbuttons %}
+          <div class="p-2">
+            {% buttons %}
+            <button type="submit" class="btn btn-dark text searchButton">
+              Search
+            </button>
+            {% endbuttons %}
+          </div>
         </div>
       </form>
     </div>
+
     <div class="row">
       {% if all_courses %} {% for course in all_courses %}
       <div class="col-md-4 col-sm-6 col-lg-3 mt-2 mb-2">
@@ -65,19 +73,26 @@
             <p class="card-title">Prof. {{ course.prof_name }}</p>
             <hr />
             <p class="card-text">{{ course.description }}</p>
-            <a href="/courses/{{course.id}}"
-              ><input
-                type="submit"
-                value="Learn More"
-                class="btn bg-black btn-sm text-white"
-                type="button"
-            /></a>
-            <br>
+            <button
+              onClick="myFunction()"
+              type="submit"
+              class="btn bg-black btn-sm text-white buttonStyle"
+            >
+              Learn More
+            </button>
+
+            <script>
+              function myFunction() {
+                window.location.href = "/courses/{{course.id}}";
+              }
+            </script>
+
+            <br />
           </div>
         </div>
       </div>
       {% endfor %} {% else %}
-      <h2>No Classes Found</h2>
+      <h2>No classes found</h2>
       {% endif %}
     </div>
   </div>
