@@ -32,7 +32,7 @@ def dept_dropdown(request):
     query = request.GET
     courses, all_courses = None, None
     if query is not None and 'q' in query:
-        dept_name = query.get('q')
+        dept_name = query.get('q').upper()
         course_num = None
         professor_name = None
         if 'n' in query:
