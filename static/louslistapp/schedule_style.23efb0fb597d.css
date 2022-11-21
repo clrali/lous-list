@@ -1,0 +1,18 @@
+* {
+  font-family: "Playfair Display", serif;
+}
+
+.bg-light-blue {
+  background-color: #e6f5ff;
+}
+
+.bg-medium-blue {
+  background-color: #ccebff;
+}
+
+.cardFormat {
+  height: 260px;
+  width: auto;
+  padding: 20px;
+  border-radius: 10px;
+}

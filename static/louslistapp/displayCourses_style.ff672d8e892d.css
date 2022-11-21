@@ -1,0 +1,46 @@
+* {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    align-items: center;
+}
+
+.bg-light-blue {
+background-color: #e6f5ff;
+}
+
+.bg-medium-blue {
+background-color: #ccebff;
+}
+
+.cardFormat {
+    height: 290px;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.formStyle {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: block;
+    width: fit-content;
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.searchButton {
+    margin-top: 15px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.buttonStyle {
+    margin: 3 auto;
+    display: block;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100px;
+}
