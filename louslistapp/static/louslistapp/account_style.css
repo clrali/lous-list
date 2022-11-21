@@ -1,3 +1,7 @@
+* {
+  font-family: "Playfair Display", serif;
+}
+
 .image-container {
   max-width: 250px;
   height: auto;
