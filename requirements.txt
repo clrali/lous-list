@@ -11,3 +11,5 @@ django-heroku
 
 django-allauth
 django-bootstrap-v5
+
+whitenoise
