@@ -215,7 +215,7 @@ def check_validity(courses):
     return time_conflicts
 
 
-# @login_required(login_url='login/')
+@login_required(login_url='login/')
 def userPage(request, id):
     # user = User.objects.get(pk=id)
     actual_account = Account.objects.get(user=request.user.id)

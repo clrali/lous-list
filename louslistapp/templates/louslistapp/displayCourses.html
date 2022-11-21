@@ -1,6 +1,7 @@
 {%extends 'louslistapp/navbar.html'%} {%load bootstrap5%} {%bootstrap_css%}
 {%bootstrap_javascript%} {%bootstrap_messages%} {%load static%} 
-{%load socialaccount%} {% block content %}
+{%load socialaccount%} 
+{% block content %}
 <link
   rel="stylesheet"
   href="{% static 'louslistapp/displayCourses_style.css' %}"
@@ -73,20 +74,13 @@
             <p class="card-title">Prof. {{ course.prof_name }}</p>
             <hr />
             <p class="card-text">{{ course.description }}</p>
-            <button
-              onClick="myFunction()"
-              type="submit"
-              class="btn bg-black btn-sm text-white buttonStyle"
-            >
-              Learn More
-            </button>
-
-            <script>
-              function myFunction() {
-                window.location.href = "/courses/{{course.id}}";
-              }
-            </script>
-
+            <a href="/courses/{{course.id}}"
+              ><input
+                type="submit"
+                value="Learn More"
+                class="btn bg-black btn-sm text-white"
+                type="button"
+            /></a>
             <br />
           </div>
         </div>

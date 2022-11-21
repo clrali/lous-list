@@ -44,3 +44,8 @@ background-color: #ccebff;
     border-radius: 10px;
     width: 100px;
 }
+
+input {
+    display: block;
+    border-radius: 10px;
+}
