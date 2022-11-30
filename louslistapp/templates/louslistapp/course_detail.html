@@ -3,7 +3,7 @@
 {%load static %}{% load socialaccount %} {% block content %}
 
 <link rel="stylesheet" href="{% static 'louslistapp/courseDetail_style.css' %}" />
-
+<!DOCTYPE html>
 <html>
   <body>
     <div class="container">
@@ -24,7 +24,7 @@
                 <button
                   type="submit"
                   class="btn btn-danger btn-sm buttonStyle"
-                  onClick="return confirm('Remove {{course.description}} from schedule?'); history.back(0);"
+                  onClick="return confirm('Remove {{course.description}} from schedule?'); window.location.reload();"
                 >
                   Remove from Schedule
                 </button>
@@ -32,7 +32,7 @@
                 <button
                   type="submit"
                   class="btn btn-success btn-sm buttonStyle"
-                  onClick="return confirm('Add {{course.description}} to schedule'); history.back(0);"
+                  onClick="return confirm('Add {{course.description}} to schedule'); window.location.reload();"
                 >
                   Add to Schedule
                 </button>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-7 shadow-lg p-3 mb-5 bg-light-blue rounded">
           <h1 class="my-3">Class Description
-            <a
+            <a target="_blank" rel="noopener noreferrer"
             href="https://thecourseforum.com/course/{{course.subject}}/{{course.catalog_number}}/"
             onclick="javascript:myFunction2('{{course.subject}}','{{course.catalog_number}}')"
             target="_blank"
@@ -88,9 +88,14 @@
     {% endblock %}
 
     <script type="text/javascript">
-      function myFunction2(p1, p2) {
+       function myFunction2(p1, p2) {
         window.location =
           "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
+      }
+
+       function refreshPage() {
+        window.location.reload();
+        return false;
       }
     </script>
   </body>
