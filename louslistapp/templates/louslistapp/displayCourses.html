@@ -74,8 +74,11 @@
             <p class="card-title">Prof. {{ course.prof_name }}</p>
             <hr />
             <p class="card-text">{{ course.description }}</p>
-            <p class="card-title">{{ course.start_time | convert_time }} - {{course.end_time | convert_time }} on {{ course.days }}</p>
-             <hr />
+            {% if course.days == "-" %}
+              <p class="card-title">Web-Based Course</p>
+            {% else %}
+              <p class="card-title">{{ course.start_time | convert_time }} - {{course.end_time | convert_time }} on {{ course.days }}</p>
+            {% endif %}
             <a href="/courses/{{course.id}}"
               ><input
                 type="submit"
