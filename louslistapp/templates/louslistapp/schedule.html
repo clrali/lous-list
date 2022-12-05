@@ -16,9 +16,11 @@
         {% for course in duplicate_courses %}
         <div class="alert alert-warning">
             <strong>Alert!</strong>
-            You have selected multiple sections of {{ course.subject }} {{ course.catalog_number }}.
+            You have selected multiple sections of {{ course.subject }} {{ course.catalog_number }}. Please go to <a href = "{% url 'profile' user.id %}">Profile</a> to edit your courses.
         </div>
         {% endfor %}
+        
+
     {% endif %}
 
 
@@ -28,14 +30,16 @@
             <div class="alert alert-warning">
                 <strong>Alert!</strong>
                 You have a time conflict between <a href="{% url 'course' course_pair.0.id %}"> {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }} </a>
-                and <a href="{% url 'course' course_pair.1.id %}"> {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} </a> on {{ key }}. Please go back and remove one of these courses to continue.
+                and <a href="{% url 'course' course_pair.1.id %}"> {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} </a> on {{ key }}. Please go to <a href = "{% url 'profile' user.id %}">Profile</a> to edit your courses.
             </div>
             {% endfor %}
         {% endfor %}
+        
     {% endif %}
 
 
     {% if schedule %}
+    
     {% for key, value in schedule.items %}
     <div class="dropdown">
     <div class="card m-2 bg-dark text-white">
