@@ -27,8 +27,8 @@
             {% for course_pair in value %}
             <div class="alert alert-warning">
                 <strong>Alert!</strong>
-                You have a time conflict between {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }}
-                and {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} on {{ key }}. Please go back and remove one of these courses to continue.
+                You have a time conflict between <a href="{% url 'course' course_pair.0.id %}"> {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }} </a>
+                and <a href="{% url 'course' course_pair.1.id %}"> {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} </a> on {{ key }}. Please go back and remove one of these courses to continue.
             </div>
             {% endfor %}
         {% endfor %}
@@ -51,7 +51,7 @@
                 <div class="card-header h6 bg-medium-blue">
                     <div class="row justify-content-between">
                         <div class="col-6">
-                            <h5>{{ course.description}} | {{ course.subject }} {{ course.catalog_number }}</h5>
+                            <h5> <a href="{% url 'course' course.id %}"> {{ course.description}} | {{ course.subject }} {{ course.catalog_number }} </a> </h5>
                             <h6 class="card-subtitle text-muted">
                                 {{ course.course_section}}-{{ course.component}} ({{ course.course_number}})
                             </h6>

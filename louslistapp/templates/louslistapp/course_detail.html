@@ -24,7 +24,7 @@
                 <button
                   type="submit"
                   class="btn btn-danger btn-sm buttonStyle"
-                  onClick="return confirm('Remove {{course.description}} from schedule?'); window.location.reload();"
+                  onClick="confirm('Remove {{course.description}} from schedule?'); window.location.reload(false);"
                 >
                   Remove from Schedule
                 </button>
@@ -32,7 +32,7 @@
                 <button
                   type="submit"
                   class="btn btn-success btn-sm buttonStyle"
-                  onClick="return confirm('Add {{course.description}} to schedule'); window.location.reload();"
+                  onClick="confirm('Add {{course.description}} to schedule?'); window.location.reload(false);"
                 >
                   Add to Schedule
                 </button>
@@ -88,14 +88,19 @@
     {% endblock %}
 
     <script type="text/javascript">
-       function myFunction2(p1, p2) {
+      function myFunction2(p1, p2) {
         window.location =
           "https://thecourseforum.com/course/" + p1 + "/" + p2 + "/";
       }
 
-       function refreshPage() {
+      function addCourseRefresh() {
+        return confirm('Add {{course.description}} to schedule?')
         window.location.reload();
-        return false;
+      }
+
+      function deleteCourseRefresh() {
+        return confirm('Remove {{course.description}} from schedule?');
+        window.location.reload();
       }
     </script>
   </body>

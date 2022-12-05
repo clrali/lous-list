@@ -85,10 +85,10 @@ def dept_dropdown(request):
                 subject=dept_name).order_by('id')
         elif course_num != "" and professor_name != "":
             all_courses = Course.objects.filter(
-                subject=dept_name, catalog_number=course_num, prof_name__contains=professor_name).order_by('id')
+                subject=dept_name, catalog_number__contains=course_num, prof_name__contains=professor_name).order_by('id')
         elif course_num != "" and professor_name == "":
             all_courses = Course.objects.filter(
-                subject=dept_name, catalog_number=course_num).order_by('id')
+                subject=dept_name, catalog_number__contains=course_num).order_by('id')
         else:
             all_courses = Course.objects.filter(
                 subject=dept_name, prof_name__contains=professor_name).order_by('id')
