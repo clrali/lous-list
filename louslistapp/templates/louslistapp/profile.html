@@ -4,6 +4,12 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'louslistapp/profile_style.css' %}">
 
+<script type="text/javascript">  
+  if(performance.navigation.type == 2){
+     location.reload(true);
+  }
+</script>
+
 <div class="row my-3 p-3 text-center">
   {% if error_message %}
   <h1>{{ error_message }}</h1>
