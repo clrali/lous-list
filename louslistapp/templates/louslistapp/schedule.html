@@ -4,6 +4,12 @@
 {% load static %}
 
 {% block content %}
+<script type="text/javascript">  
+    if(performance.navigation.type == 2){
+       location.reload(true);
+    }
+</script>
+
 <link rel="stylesheet" href="{% static 'louslistapp/schedule_style.css' %}">
 
 <div class="m-4 text-center">
@@ -29,8 +35,8 @@
             {% for course_pair in value %}
             <div class="alert alert-warning">
                 <strong>Alert!</strong>
-                You have a time conflict between <a href="{% url 'course' course_pair.0.id %}"> {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }} </a>
-                and <a href="{% url 'course' course_pair.1.id %}"> {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} </a> on {{ key }}. Please go to <a href = "{% url 'profile' user.id %}">Profile</a> to edit your courses.
+                You have a time conflict between {{ course_pair.0.subject }} {{ course_pair.0.catalog_number }} and 
+                {{ course_pair.1.subject }} {{ course_pair.1.catalog_number }} on {{ key }}. Please go to <a href = "{% url 'profile' user.id %}">Profile</a> to edit your courses.
             </div>
             {% endfor %}
         {% endfor %}
